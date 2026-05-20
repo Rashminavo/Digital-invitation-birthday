@@ -4,24 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>You're Invited! 🐻</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet"/>
   <style>
     :root {
       --bear-cream: #f8f4ec;
       --bear-brown: #0b1d4d;
+      --bear-dark: #0b1d4d;
+      --bear-light: #f8f4ec;
       --bear-accent: #d4af37;
+      --bear-stripe: #d9c2a3;
+      --text-dark: #0b1d4d;
+      --shadow: rgba(11, 29, 77, 0.25);
       --font-display: 'Playfair Display', serif;
       --font-body: 'Nunito', sans-serif;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; }
 
-    /* ============ LUXURY CINEMATIC ENVELOPE PAGE ============ */
     .envelope-page {
-      background: linear-gradient(135deg, #0b1d4d 0%, #0b2a1a 50%, #0d1f2d 100%);
-      width: 100%;
-      height: 100vh;
+      background: #0b2a1a;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -29,376 +31,808 @@
       font-family: var(--font-body);
       overflow: hidden;
       cursor: pointer;
-      perspective: 1200px;
       position: relative;
-    }
-
-    .envelope-page::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.06) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 1;
     }
 
     .paw-bg {
       position: fixed;
       inset: 0;
-      opacity: 0.02;
       pointer-events: none;
-      background-image: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 60px,
-        rgba(212, 175, 55, 0.05) 60px,
-        rgba(212, 175, 55, 0.05) 120px
-      );
+      background-color: #0b2a1a;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(11,29,77,0.6) 38px, rgba(11,29,77,0.6) 42px),
+        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(11,29,77,0.6) 38px, rgba(11,29,77,0.6) 42px),
+        repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(212,175,55,0.25) 18px, rgba(212,175,55,0.25) 20px),
+        repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(212,175,55,0.25) 18px, rgba(212,175,55,0.25) 20px),
+        repeating-linear-gradient(0deg, transparent, transparent 76px, rgba(139,0,0,0.2) 76px, rgba(139,0,0,0.2) 79px),
+        repeating-linear-gradient(90deg, transparent, transparent 76px, rgba(139,0,0,0.2) 76px, rgba(139,0,0,0.2) 79px);
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 420px;
+      height: 300px;
+      z-index: 1;
+    }
+
+    .envelope {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 30px 60px rgba(0,0,0,0.8));
+    }
+
+    .envelope:hover { transform: scale(1.02) rotate(-0.5deg); }
+
+    /* Envelope back */
+    .envelope::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #1a4d2e 0%, #0b2a1a 100%);
+      border-radius: 4px 4px 14px 14px;
+      border: 2px solid #d4af37;
       z-index: 0;
     }
 
-    /* ===== CINEMA ENVELOPE FLAP ===== */
-    .cinema-envelope-container {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-
-    .envelope-flap-display {
-      position: relative;
-      width: 550px;
-      max-width: 90vw;
-      height: 340px;
-      background: linear-gradient(145deg, #1a3a52 0%, #0f2838 100%);
-      border-radius: 24px 24px 8px 8px;
-      border: 3px solid #d4af37;
-      box-shadow: 
-        0 50px 120px rgba(0, 0, 0, 0.8),
-        0 20px 60px rgba(212, 175, 55, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      overflow: hidden;
-      transform-style: preserve-3d;
-      animation: envelopeEntrance 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    }
-
-    @keyframes envelopeEntrance {
-      from {
-        opacity: 0;
-        transform: translateY(80px) scale(0.85) rotateX(20deg);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1) rotateX(0deg);
-      }
-    }
-
-    .envelope-flap-display::before {
+    .envelope::after {
       content: '';
       position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 30px,
-        rgba(11, 42, 26, 0.08) 30px,
-        rgba(11, 42, 26, 0.08) 60px
-      );
+      inset: 7px;
+      border: 1px solid rgba(212,175,55,0.25);
+      border-radius: 2px 2px 10px 10px;
       pointer-events: none;
+      z-index: 0;
     }
 
-    .envelope-flap-display::after {
-      content: '';
+    /* Flap */
+    .envelope-flap {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(212,175,55,0.12) 0%, transparent 40%, rgba(0,0,0,0.4) 100%);
-      pointer-events: none;
-    }
-
-    /* ===== LUXURY WAX SEAL - CENTER PIECE ===== */
-    .luxury-wax-seal {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 160px;
-      height: 160px;
-      cursor: pointer;
-      z-index: 20;
-      filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.4));
-      transition: filter 0.3s ease;
-    }
-
-    .luxury-wax-seal:hover {
-      filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.8));
-    }
-
-    .wax-seal-circle {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #f0d86a 0%, #e8c547 20%, #d4af37 35%, #c9a227 60%, #9d7e1f 100%);
-      box-shadow: 
-        0 30px 80px rgba(212, 175, 55, 0.6),
-        inset -12px -12px 30px rgba(0, 0, 0, 0.5),
-        inset 6px 6px 20px rgba(255, 255, 255, 0.3),
-        inset 0 0 20px rgba(255, 255, 255, 0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3.5rem;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      animation: sealGlowPulse 3.5s ease-in-out infinite;
-    }
-
-    @keyframes sealGlowPulse {
-      0%, 100% { 
-        filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
-        transform: scale(1);
-      }
-      50% { 
-        filter: drop-shadow(0 0 50px rgba(212, 175, 55, 0.7));
-        transform: scale(1.05);
-      }
-    }
-
-    .wax-seal-circle:hover {
-      transform: scale(1.12);
-      box-shadow: 
-        0 35px 100px rgba(212, 175, 55, 0.8),
-        inset -12px -12px 30px rgba(0, 0, 0, 0.5),
-        inset 6px 6px 20px rgba(255, 255, 255, 0.4);
-    }
-
-    .wax-seal-circle.breaking {
-      animation: sealBreak 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-    }
-
-    @keyframes sealBreak {
-      0% {
-        transform: scale(1) rotate(0deg);
-        opacity: 1;
-        filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.8));
-      }
-      40% {
-        transform: scale(1.2) rotate(-8deg);
-        filter: drop-shadow(0 0 80px rgba(212, 175, 55, 1));
-      }
-      100% {
-        transform: scale(0) rotate(360deg);
-        opacity: 0;
-        filter: drop-shadow(0 0 0px rgba(212, 175, 55, 0));
-      }
-    }
-
-    /* ===== ENVELOPE FLAP OPENING ===== */
-    .envelope-flap-top {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: linear-gradient(160deg, #0f2838 0%, #1a3a52 100%);
-      border-bottom: 2px solid #d4af37;
-      transform-style: preserve-3d;
+      top: 0; left: 0;
+      width: 100%; height: 52%;
+      background: linear-gradient(170deg, #0b1d4d 0%, #1a3a5c 50%, #1a4d2e 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 95%);
       transform-origin: top center;
-      transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: transform 0.7s cubic-bezier(.68,-0.55,.27,1.55);
       z-index: 3;
+      border-left: 2px solid #d4af37;
+      border-right: 2px solid #d4af37;
+      border-top: 2px solid #d4af37;
     }
 
-    .envelope-flap-top::before {
+    .envelope-flap::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 30px,
-        rgba(11, 42, 26, 0.08) 30px,
-        rgba(11, 42, 26, 0.08) 60px
-      );
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(212,175,55,0.12) 18px, rgba(212,175,55,0.12) 20px),
+        repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(212,175,55,0.12) 18px, rgba(212,175,55,0.12) 20px);
+      clip-path: polygon(0 0, 100% 0, 50% 95%);
       pointer-events: none;
     }
 
-    .envelope-flap-top.opening {
-      transform: rotateX(140deg);
-    }
-
-    /* ===== INSIDE GLOW REVEAL ===== */
-    .envelope-inside-glow {
+    .envelope-flap::after {
+      content: '';
       position: absolute;
-      top: 55%;
-      left: 50%;
-      width: 350px;
-      height: 350px;
-      background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, rgba(212, 175, 55, 0.1) 40%, transparent 70%);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      animation: insideGlowReveal 1s ease-out 0.5s forwards;
-      filter: blur(60px);
-      pointer-events: none;
-      z-index: 2;
+      bottom: -1px;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, #d4af37 30%, #f5e87e 50%, #d4af37 70%, transparent 100%);
     }
 
-    @keyframes insideGlowReveal {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.3);
-      }
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
-    }
+    .envelope-flap.open { transform: rotateX(180deg); }
 
-    /* ===== CONFETTI PARTICLES ===== */
-    .confetti-container {
-      position: fixed;
+    /* Body */
+    .envelope-body {
+      position: absolute;
       inset: 0;
+      background: linear-gradient(160deg, #f5f0e8 0%, #fdf9f2 60%, #f0ead8 100%);
+      border-radius: 4px 4px 14px 14px;
+      border: 2px solid #d4af37;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Bottom triangle fold lines */
+    .envelope-body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(11,29,77,0.03) 48px, rgba(11,29,77,0.03) 49px),
+        repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(11,29,77,0.03) 48px, rgba(11,29,77,0.03) 49px);
       pointer-events: none;
-      z-index: 15;
     }
 
-    .confetti-piece {
-      position: fixed;
+    /* Bottom fold V line */
+    .envelope-body::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 52%;
+      clip-path: polygon(0 100%, 50% 0, 100% 100%);
+      background: rgba(0,0,0,0.04);
       pointer-events: none;
-      opacity: 0.9;
     }
 
-    .confetti-piece.gold {
-      background: #d4af37;
-    }
-
-    .confetti-piece.cream {
-      background: #f8f4ec;
-    }
-
-    @keyframes confettiFall {
-      to {
-        transform: translateY(100vh) rotateZ(720deg);
-        opacity: 0;
-      }
-    }
-
-    /* ===== CLICK HINT ===== */
-    .click-hint {
-      position: fixed;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      color: #d4af37;
-      font-family: var(--font-display);
-      font-size: 1rem;
+    .envelope-letter {
+      background: white;
+      width: 88%;
+      height: 72%;
+      border-radius: 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
-      animation: fadeUpIn 1s ease 2.2s both;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.9s cubic-bezier(.22,.61,.36,1);
+      transform: translateY(20px);
+      position: relative;
+      z-index: 1;
+      border: 1px solid rgba(212,175,55,0.45);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    .envelope-letter::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border: 1px solid rgba(212,175,55,0.2);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+
+    .envelope-letter.rise { transform: translateY(-190px); }
+
+    .bear-icon { font-size: 2rem; }
+
+    .envelope-letter h2 {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      color: #0b1d4d;
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .envelope-letter p {
+      font-size: 0.68rem;
+      color: #1a4d2e;
       font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
+    }
+
+    /* ===== WAX SEAL on the flap fold ===== */
+    .wax-seal {
+      position: absolute;
+      left: 50%;
+      /* sits right at the flap fold line — 52% of envelope height */
+      top: calc(52% - 36px);
+      transform: translateX(-50%);
+      width: 72px;
+      height: 72px;
       z-index: 5;
+      animation: sealDrop 1s cubic-bezier(.68,-0.55,.27,1.55) 0.4s both;
+      pointer-events: none;
+    }
+
+    @keyframes sealDrop {
+      from { opacity: 0; transform: translateX(-50%) scale(0) rotate(-200deg); }
+      to   { opacity: 1; transform: translateX(-50%) scale(1) rotate(0deg); }
+    }
+
+    .click-hint {
+      position: fixed;
+      bottom: 44px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: #e8c99a;
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      animation: fadeUpIn 1s ease 1.5s both;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
     }
 
     .pulse-ring {
-      width: 56px;
-      height: 56px;
-      border: 2.5px solid #d4af37;
+      width: 42px; height: 42px;
+      border: 2px solid #d4af37;
       border-radius: 50%;
-      animation: luxePulse 2.2s ease-out infinite;
+      animation: pulse 1.8s ease infinite;
     }
 
-    @keyframes luxePulse {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(2.2);
-        opacity: 0;
-      }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2.2); opacity: 0; }
     }
 
     @keyframes fadeUpIn {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
 
-    /* ===== TRANSITION TO INVITATION ===== */
-    .cinema-envelope-container.zoom-out {
-      animation: zoomTransition 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    /* ============ INVITATION PAGE ============ */
+    .invite-page {
+      background: var(--bear-light);
+      font-family: var(--font-body);
+      color: var(--text-dark);
+      overflow-x: hidden;
     }
 
-    @keyframes zoomTransition {
-      0% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0.8);
-      }
+    .invite-page.page-enter {
+      animation: pageReveal 0.8s ease both;
     }
 
-    @media (max-width: 600px) {
-      .envelope-flap-display {
-        width: 95vw;
-        height: 280px;
-      }
-      .luxury-wax-seal {
-        width: 120px;
-        height: 120px;
-      }
-      .wax-seal-circle {
-        font-size: 2.5rem;
-      }
+    @keyframes pageReveal {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .hero {
+      text-align: center;
+      min-height: 100vh;
+      padding: 80px 20px;
+      background: linear-gradient(160deg, #0b1d4d 0%, #0b2a1a 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0 0 40px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(212,175,55,0.06) 38px, rgba(212,175,55,0.06) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(212,175,55,0.06) 38px, rgba(212,175,55,0.06) 40px),
+        repeating-linear-gradient(0deg, transparent, transparent 76px, rgba(139,0,0,0.05) 76px, rgba(139,0,0,0.05) 78px),
+        repeating-linear-gradient(90deg, transparent, transparent 76px, rgba(139,0,0,0.05) 76px, rgba(139,0,0,0.05) 78px);
+      pointer-events: none;
+      border-radius: 0 0 40px 40px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .bear-emoji {
+      font-size: 6rem;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      50%       { transform: translateY(-14px) rotate(2deg); }
+    }
+
+    .invite-badge {
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.4);
+      color: #d4af37;
+      font-size: 0.68rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 6px 22px;
+      border-radius: 50px;
+    }
+
+    .invite-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      font-style: italic;
+      color: #f8f4ec;
+      margin: 0;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+      letter-spacing: 2px;
+      line-height: 1.1;
+    }
+
+    .invite-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 280px;
+    }
+
+    .invite-divider span {
+      flex: 1;
+      height: 1px;
+      background: rgba(212,175,55,0.4);
+    }
+
+    .invite-divider em {
+      color: #d4af37;
+      font-size: 1rem;
+      font-style: normal;
+    }
+
+    .birthday-name {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      color: #d4af37;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .countdown-section {
+      text-align: center;
+      padding: 60px 20px;
+      background: #f8f4ec;
+    }
+
+    .countdown-section h3 {
+      font-size: 0.72rem;
+      color: #0b1d4d;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      margin-bottom: 36px;
+      font-weight: 700;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .count-box {
+      background: linear-gradient(135deg, #0b1d4d 0%, #0b2a1a 100%);
+      color: #f8f4ec;
+      border-radius: 16px;
+      padding: 22px 26px;
+      min-width: 84px;
+      box-shadow: 0 8px 30px rgba(11,29,77,0.3);
+      border: 1px solid rgba(212,175,55,0.3);
+      transition: transform 0.2s;
+    }
+
+    .count-box:hover { transform: translateY(-4px); }
+
+    .count-box span {
+      display: block;
+      font-size: 2.6rem;
+      font-weight: 900;
+      line-height: 1;
+      color: #d4af37;
+    }
+
+    .count-box label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      opacity: 0.7;
+      margin-top: 6px;
+      display: block;
+    }
+
+    .details-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      padding: 60px 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .detail-card {
+      background: white;
+      border-radius: 24px;
+      padding: 36px 24px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(11,29,77,0.1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .detail-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #0b1d4d, #1a4d2e, #d4af37);
+    }
+
+    .detail-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(11,29,77,0.15);
+    }
+
+    .detail-icon { font-size: 2.4rem; display: block; margin-bottom: 14px; }
+
+    .detail-card h4 {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #d4af37;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .detail-card p {
+      color: #0b1d4d;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .map-section {
+      padding: 60px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-style: italic;
+      color: #0b1d4d;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .section-heading::before,
+    .section-heading::after {
+      content: '';
+      flex: 1;
+      max-width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #d4af37);
+    }
+
+    .section-heading::after {
+      background: linear-gradient(90deg, #d4af37, transparent);
+    }
+
+    .map-wrapper {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 48px rgba(11,29,77,0.2);
+      border: 3px solid #0b1d4d;
+      cursor: pointer;
+      transition: transform 0.3s;
+      position: relative;
+    }
+
+    .map-wrapper::after {
+      content: '↗ Open in Maps';
+      position: absolute;
+      top: 14px; right: 14px;
+      background: #0b1d4d;
+      color: #d4af37;
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 1px solid rgba(212,175,55,0.4);
+      pointer-events: none;
+    }
+
+    .map-wrapper:hover { transform: scale(1.01); }
+    .map-wrapper iframe { pointer-events: none; display: block; }
+
+    .gallery-section {
+      padding: 60px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .photo-item {
+      border-radius: 18px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      box-shadow: 0 4px 20px rgba(11,29,77,0.12);
+      transition: transform 0.3s, box-shadow 0.3s;
+      background: linear-gradient(135deg, #f0ebe0, #e8e0d0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      border: 1px solid rgba(212,175,55,0.2);
+    }
+
+    .photo-item:hover {
+      transform: scale(1.04) rotate(1deg);
+      box-shadow: 0 14px 44px rgba(11,29,77,0.2);
+    }
+
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+
+    .rsvp-section {
+      text-align: center;
+      padding: 80px 24px;
+      background: linear-gradient(135deg, #0b1d4d 0%, #0b2a1a 100%);
+      color: white;
+      border-radius: 40px 40px 0 0;
+      margin-top: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rsvp-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(212,175,55,0.04) 38px, rgba(212,175,55,0.04) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(212,175,55,0.04) 38px, rgba(212,175,55,0.04) 40px);
+      pointer-events: none;
+    }
+
+    .rsvp-section h3 {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      font-style: italic;
+      color: #f8f4ec;
+      margin-bottom: 10px;
+      font-weight: 700;
+      position: relative;
+    }
+
+    .rsvp-section > p {
+      color: #d4af37;
+      margin-bottom: 36px;
+      font-size: 0.82rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+      position: relative;
+    }
+
+    .rsvp-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .rsvp-btn {
+      padding: 18px 44px;
+      border: none;
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 1px;
+    }
+
+    .rsvp-btn.yes {
+      background: linear-gradient(135deg, #d4af37, #f0c84a);
+      color: #0b1d4d;
+      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+    }
+
+    .rsvp-btn.no {
+      background: transparent;
+      color: #f8f4ec;
+      border: 2px solid rgba(248,244,236,0.35);
+    }
+
+    .rsvp-btn:hover { transform: scale(1.06); }
+    .rsvp-btn.selected { box-shadow: 0 0 0 4px #d4af37; }
+
+    .rsvp-message {
+      margin-top: 28px;
+      font-size: 1.1rem;
+      min-height: 40px;
+      color: #f8f4ec;
+      position: relative;
+      animation: fadeIn 0.5s ease;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 24px;
+      background: #060f26;
+      color: rgba(212,175,55,0.65);
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .party-time {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #d4af37;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @media (max-width: 480px) {
+      .envelope-wrapper { width: 320px; height: 240px; }
+      .wax-seal { width: 58px; height: 58px; top: calc(52% - 29px); }
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
+      .countdown { gap: 10px; }
+      .count-box { min-width: 68px; padding: 16px 14px; }
+      .count-box span { font-size: 2rem; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body class="envelope-page">
+
   <div class="paw-bg"></div>
 
-  <div class="cinema-envelope-container" id="cinemaContainer">
-    <div class="envelope-flap-display">
-      <div class="envelope-flap-top" id="flapTop"></div>
-      <div class="envelope-inside-glow" id="insideGlow"></div>
-      
-      <div class="luxury-wax-seal" id="luxeWaxSeal" onclick="breakSeal()">
-        <div class="wax-seal-circle" id="sealCircle">
-          🐎
+  <!-- ENVELOPE -->
+  <div class="envelope-wrapper" id="envelopeWrapper">
+    <div class="envelope" id="envelope">
+      <div class="envelope-flap" id="flap"></div>
+
+      <div class="envelope-body">
+        <div class="envelope-letter" id="letter">
+          <span class="bear-icon">🐻</span>
+          <h2>You have a special message...</h2>
+          <p>Tap to open</p>
         </div>
       </div>
+
+      <!-- WAX SEAL sits on the flap fold line -->
+      <div class="wax-seal">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="waxOuter" cx="38%" cy="32%" r="65%">
+              <stop offset="0%"   stop-color="#f2c040"/>
+              <stop offset="35%"  stop-color="#d4900a"/>
+              <stop offset="70%"  stop-color="#b07010"/>
+              <stop offset="100%" stop-color="#7a4800"/>
+            </radialGradient>
+            <radialGradient id="waxFace" cx="38%" cy="32%" r="60%">
+              <stop offset="0%"   stop-color="#f0c840"/>
+              <stop offset="50%"  stop-color="#c88010"/>
+              <stop offset="100%" stop-color="#9a6200"/>
+            </radialGradient>
+            <radialGradient id="shine" cx="33%" cy="28%" r="38%">
+              <stop offset="0%"   stop-color="rgba(255,245,180,0.55)"/>
+              <stop offset="100%" stop-color="rgba(255,200,0,0)"/>
+            </radialGradient>
+            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.5)"/>
+            </filter>
+          </defs>
+
+          <!-- Drop shadow base -->
+          <ellipse cx="41" cy="44" rx="30" ry="28" fill="rgba(0,0,0,0.3)" filter="url(#softShadow)"/>
+
+          <!-- Wax drip blob — irregular organic shape like real wax -->
+          <path d="
+            M40 8
+            C45 7, 52 9, 57 14
+            C62 18, 65 24, 67 30
+            C69 35, 70 40, 69 45
+            C68 51, 64 56, 59 60
+            C54 64, 48 67, 42 67
+            C36 68, 30 66, 25 62
+            C19 58, 15 52, 13 46
+            C11 40, 11 33, 14 27
+            C17 21, 22 16, 28 13
+            C33 9, 37 8, 40 8Z
+          " fill="url(#waxOuter)"/>
+
+          <!-- Inner slightly lighter circle -->
+          <circle cx="40" cy="38" r="25" fill="url(#waxFace)" opacity="0.7"/>
+
+          <!-- Engraved ring -->
+          <circle cx="40" cy="38" r="23" fill="none" stroke="rgba(255,215,80,0.35)" stroke-width="1"/>
+          <circle cx="40" cy="38" r="21" fill="none" stroke="rgba(100,60,0,0.25)" stroke-width="0.6"/>
+
+          <!-- Shine highlight -->
+          <circle cx="40" cy="38" r="25" fill="url(#shine)"/>
+
+          <!-- ===== POLO BEAR ENGRAVING ===== -->
+          <!-- Bear head -->
+          <circle cx="40" cy="36" r="13" fill="rgba(70,35,0,0.45)"/>
+          <circle cx="40" cy="36" r="12" fill="rgba(90,45,5,0.55)"/>
+
+          <!-- Ears -->
+          <circle cx="30" cy="26" r="5.5" fill="rgba(85,42,3,0.55)"/>
+          <circle cx="50" cy="26" r="5.5" fill="rgba(85,42,3,0.55)"/>
+          <circle cx="30" cy="26" r="3.2" fill="rgba(120,65,10,0.5)"/>
+          <circle cx="50" cy="26" r="3.2" fill="rgba(120,65,10,0.5)"/>
+
+          <!-- Snout -->
+          <ellipse cx="40" cy="39" rx="7.5" ry="5.5" fill="rgba(130,70,10,0.5)"/>
+
+          <!-- Eyes -->
+          <circle cx="36.5" cy="34" r="2" fill="rgba(40,18,0,0.75)"/>
+          <circle cx="43.5" cy="34" r="2" fill="rgba(40,18,0,0.75)"/>
+          <!-- Eye shine -->
+          <circle cx="37.2" cy="33.3" r="0.7" fill="rgba(255,240,160,0.45)"/>
+          <circle cx="44.2" cy="33.3" r="0.7" fill="rgba(255,240,160,0.45)"/>
+
+          <!-- Nose -->
+          <ellipse cx="40" cy="38.5" rx="2.2" ry="1.5" fill="rgba(35,15,0,0.75)"/>
+
+          <!-- Smile -->
+          <path d="M36.5 42.5 Q40 46 43.5 42.5" stroke="rgba(35,15,0,0.65)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+
+          <!-- Polo collar / shirt hint -->
+          <path d="M31.5 48 Q40 53 48.5 48" stroke="rgba(20,60,30,0.6)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M35 48 L38 52 L40 50 L42 52 L45 48" stroke="rgba(20,60,30,0.5)" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+
+          <!-- RL monogram below bear -->
+          <text x="40" y="61.5" text-anchor="middle" font-family="Georgia,serif" font-size="6" font-weight="bold" fill="rgba(30,15,0,0.65)" letter-spacing="2">RL</text>
+        </svg>
+      </div>
+
     </div>
   </div>
 
   <div class="click-hint" id="clickHint">
     <div class="pulse-ring"></div>
-    <span>Tap the Wax Seal</span>
+    <span>Open Your Invitation</span>
   </div>
 
-  <!-- INVITATION PAGE -->
+  <!-- ====== INVITATION PAGE ====== -->
   <div id="invitationPage" style="display:none; width:100%;">
-    <!-- [Rest of your invitation content goes here - I'll keep the original] -->
+
     <section class="hero">
-      <span class="bear-emoji">🐻</span>
-      <h1 class="invite-title">You're Invited!</h1>
-      <p class="invite-subtitle">Join us for a Beary Special Celebration</p>
-      <h2 class="birthday-name">Liam's Birthday 🎉</h2>
+      <div class="hero-content">
+        <div class="invite-badge">A Special Celebration</div>
+        <span class="bear-emoji">🐻</span>
+        <h1 class="invite-title">You're Invited!</h1>
+        <div class="invite-divider">
+          <span></span><em>✦</em><span></span>
+        </div>
+        <h2 class="birthday-name">Liam's Birthday 🎉</h2>
+      </div>
     </section>
 
     <section class="countdown-section">
-      <h3>The Party Starts In...</h3>
+      <h3>The Party Starts In</h3>
       <div class="countdown" id="countdown">
         <div class="count-box"><span id="days">00</span><label>Days</label></div>
         <div class="count-box"><span id="hours">00</span><label>Hours</label></div>
@@ -431,7 +865,7 @@
     </section>
 
     <section class="map-section">
-      <h3>📍 Find Us Here</h3>
+      <h3 class="section-heading">Find Us Here</h3>
       <div class="map-wrapper" onclick="openMapLocation()">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.106174005944!2d79.89782557476984!3d6.8778814931209435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25a172dd73385%3A0xf4a491ef4637a9f3!2sRaffles%20Banquets%20%26%20Catering!5e0!3m2!1sen!2slk!4v1779250589085!5m2!1sen!2slk"
@@ -444,7 +878,7 @@
     </section>
 
     <section class="gallery-section">
-      <h3>🐾 Memories So Far</h3>
+      <h3 class="section-heading">Memories So Far</h3>
       <div class="photo-grid">
         <div class="photo-item">📸</div>
         <div class="photo-item">📸</div>
@@ -457,7 +891,7 @@
 
     <section class="rsvp-section">
       <h3>🐻 Will You Be There?</h3>
-      <p>Let us know by <strong>August 9th</strong></p>
+      <p>Kindly respond by August 9th</p>
       <div class="rsvp-buttons">
         <button class="rsvp-btn yes" onclick="rsvp('yes')">🎉 Yes, I'll be there!</button>
         <button class="rsvp-btn no" onclick="rsvp('no')">😢 Sorry, can't make it</button>
@@ -466,138 +900,89 @@
     </section>
 
     <footer>
-      <span class="bear-paw">🐾</span>
+      <span>🐾</span>
       <p>Made with love for a beary special day</p>
-      <span class="bear-paw">🐾</span>
+      <span>🐾</span>
     </footer>
+
   </div>
 
   <script>
-    // ===== BREAK SEAL ANIMATION =====
-    function breakSeal() {
-      const sealCircle = document.getElementById('sealCircle');
-      const flapTop = document.getElementById('flapTop');
-      const insideGlow = document.getElementById('insideGlow');
-      const clickHint = document.getElementById('clickHint');
-      const cinemaContainer = document.getElementById('cinemaContainer');
+    const flap    = document.getElementById('flap');
+    const letter  = document.getElementById('letter');
+    const hint    = document.getElementById('clickHint');
+    const envWrap = document.getElementById('envelopeWrapper');
+    const invPage = document.getElementById('invitationPage');
 
-      // Prevent multiple clicks
-      sealCircle.style.pointerEvents = 'none';
+    document.body.addEventListener('click', openEnvelope);
 
-      // 1. Seal breaks
-      sealCircle.classList.add('breaking');
-
-      // 2. Create confetti
-      createConfetti();
-
-      // 3. Flap opens after seal breaks
+    function openEnvelope() {
+      document.body.removeEventListener('click', openEnvelope);
+      hint.style.display = 'none';
+      flap.classList.add('open');
+      setTimeout(() => letter.classList.add('rise'), 500);
       setTimeout(() => {
-        flapTop.classList.add('opening');
-        insideGlow.style.opacity = '1';
-      }, 200);
-
-      // 4. Transition to invitation after opening completes
-      setTimeout(() => {
-        cinemaContainer.classList.add('zoom-out');
-        clickHint.style.display = 'none';
-      }, 1200);
-
-      // 5. Show invitation page
-      setTimeout(() => {
+        envWrap.style.display = 'none';
+        document.querySelector('.paw-bg').style.display = 'none';
         document.body.classList.remove('envelope-page');
-        document.getElementById('invitationPage').style.display = 'block';
-        document.getElementById('cinemaContainer').style.display = 'none';
+        document.body.classList.add('invite-page', 'page-enter');
+        document.body.style.background = '';
+        invPage.style.display = 'block';
         startCountdown();
         initScrollReveal();
-      }, 2400);
+      }, 1900);
     }
 
-    // ===== CONFETTI ANIMATION ===== function createConfetti() {
-      const container = document.body;
-      const colors = ['gold', 'cream'];
-      const confettiCount = 40;
-
-      for (let i = 0; i < confettiCount; i++) {
-        const piece = document.createElement('div');
-        piece.className = `confetti-piece ${colors[Math.floor(Math.random() * colors.length)]}`;
-        
-        const size = Math.random() * 8 + 4;
-        piece.style.width = size + 'px';
-        piece.style.height = size + 'px';
-        piece.style.left = Math.random() * 100 + '%';
-        piece.style.top = '50%';
-        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-        
-        const duration = Math.random() * 2 + 2.5;
-        piece.style.animation = `confettiFall ${duration}s ease-in forwards`;
-        piece.style.animationDelay = Math.random() * 0.3 + 's';
-        
-        container.appendChild(piece);
-        
-        setTimeout(() => piece.remove(), (duration + 0.3) * 1000);
-      }
-    
-
-    // ===== COUNTDOWN =====
     function startCountdown() {
       const partyDate = new Date('2026-08-16T18:00:00');
-
       function update() {
         const diff = partyDate - new Date();
         if (diff <= 0) {
-          document.getElementById('countdown').innerHTML = '<div class="party-time">🎉 The party is NOW! 🎉</div>';
+          document.getElementById('countdown').innerHTML =
+            '<div class="party-time">🎉 The party is NOW! 🎉</div>';
           return;
         }
         const d = Math.floor(diff / (1000*60*60*24));
         const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
         const m = Math.floor((diff % (1000*60*60)) / (1000*60));
         const s = Math.floor((diff % (1000*60)) / 1000);
-
-        document.getElementById('days').textContent = String(d).padStart(2, '0');
-        document.getElementById('hours').textContent = String(h).padStart(2, '0');
-        document.getElementById('minutes').textContent = String(m).padStart(2, '0');
-        document.getElementById('seconds').textContent = String(s).padStart(2, '0');
+        document.getElementById('days').textContent    = String(d).padStart(2,'0');
+        document.getElementById('hours').textContent   = String(h).padStart(2,'0');
+        document.getElementById('minutes').textContent = String(m).padStart(2,'0');
+        document.getElementById('seconds').textContent = String(s).padStart(2,'0');
       }
-
       update();
       setInterval(update, 1000);
     }
 
-    // ===== RSVP =====
     function rsvp(choice) {
       const msg = document.getElementById('rsvpMessage');
-      const btns = document.querySelectorAll('.rsvp-btn');
-
-      btns.forEach(b => b.classList.remove('selected'));
-      document.querySelector(`.rsvp-btn.${choice}`).classList.add('selected');
-
+      document.querySelectorAll('.rsvp-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelector('.rsvp-btn.' + choice).classList.add('selected');
       if (choice === 'yes') {
-        msg.textContent = "🐻 Beary excited to see you there! We'll save you a spot!";
+        msg.textContent = "🐻 Beary excited to see you there! Redirecting to RSVP form...";
         setTimeout(() => {
-          window.open('https://docs.google.com/forms/d/e/1FAIpQLSexISLfxqGcsKy_JEkyF6F7jxFVDRNcvr78aQcw27cky8GV1A/viewform', '_blank');
+          window.open('https://docs.google.com/forms/d/e/1FAIpQLSexISLfxqGcsKy_JEkyF6F7jxFVDRNcvr78aQcw27cky8GV1A/viewform?usp=publish-editor', '_blank');
         }, 1000);
       } else {
         msg.textContent = "😢 We'll miss you! We'll save some cake for you 🍰";
       }
     }
 
-    // ===== SCROLL REVEAL =====
+    function openMapLocation() {
+      window.open('https://www.google.com/maps/place/Raffles+Banquets+%26+Catering/@6.8778815,79.8978256,15z', '_blank');
+    }
+
     function initScrollReveal() {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.style.animation = 'fadeIn 0.6s ease both';
+            entry.target.style.animation = 'slideUp 0.7s ease both';
           }
         });
       }, { threshold: 0.1 });
-
       document.querySelectorAll('.detail-card, .photo-item, .count-box, .countdown-section, .details-section, .map-section, .gallery-section, .rsvp-section')
         .forEach(el => observer.observe(el));
-    }
-
-    // ===== OPEN MAP =====
-    function openMapLocation() {
-      window.open('https://www.google.com/maps/place/Raffles+Banquets+%26+Catering/@6.8778815,79.8978256,15z', '_blank');
     }
   </script>
 
