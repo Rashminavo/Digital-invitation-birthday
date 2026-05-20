@@ -166,12 +166,17 @@
 
     .hero {
       text-align: center;
+      min-height: 100vh;
       padding: 60px 20px 40px;
       background: linear-gradient(160deg, var(--bear-brown) 0%, var(--bear-dark) 100%);
       color: white;
       position: relative;
       overflow: hidden;
       border-radius: 0 0 40px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .hero::before {
@@ -220,6 +225,7 @@
       text-align: center;
       padding: 50px 20px;
       background: var(--bear-cream);
+      opacity: 0;
     }
 
     .countdown-section h3 {
@@ -245,6 +251,7 @@
       min-width: 80px;
       box-shadow: 0 8px 30px var(--shadow);
       transition: transform 0.2s;
+      opacity: 0;
     }
 
     .count-box:hover { transform: translateY(-4px); }
@@ -272,6 +279,7 @@
       padding: 40px 24px;
       max-width: 900px;
       margin: 0 auto;
+      opacity: 0;
     }
 
     .detail-card {
@@ -282,6 +290,7 @@
       box-shadow: 0 4px 24px var(--shadow);
       border-top: 4px solid var(--bear-brown);
       transition: transform 0.3s, box-shadow 0.3s;
+      opacity: 0;
     }
 
     .detail-card:hover {
@@ -305,6 +314,7 @@
       padding: 40px 24px;
       max-width: 900px;
       margin: 0 auto;
+      opacity: 0;
     }
 
     .map-section h3 {
@@ -327,6 +337,7 @@
       padding: 40px 24px;
       max-width: 1000px;
       margin: 0 auto;
+      opacity: 0;
     }
 
     .gallery-section h3 {
@@ -355,6 +366,7 @@
       align-items: center;
       justify-content: center;
       font-size: 2.5rem;
+      opacity: 0;
     }
 
     .photo-item:hover {
@@ -374,6 +386,7 @@
       color: white;
       border-radius: 40px 40px 0 0;
       margin-top: 40px;
+      opacity: 0;
     }
 
     .rsvp-section h3 {
@@ -651,7 +664,7 @@
         });
       }, { threshold: 0.1 });
 
-      document.querySelectorAll('.detail-card, .photo-item, .count-box')
+      document.querySelectorAll('.detail-card, .photo-item, .count-box, .countdown-section, .details-section, .map-section, .gallery-section, .rsvp-section')
         .forEach(el => observer.observe(el));
     }
   </script>
