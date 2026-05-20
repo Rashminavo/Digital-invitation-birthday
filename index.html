@@ -4,8 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>You're Invited! 🐻</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+
+  <!-- CONFETTI -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <style>
+
     :root {
       --bear-cream: #f8f4ec;
       --bear-brown: #0b1d4d;
@@ -19,7 +25,15 @@
       --font-body: 'Nunito', sans-serif;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      overflow-x:hidden;
+    }
 
     .envelope-page {
       background: #0b2a1a;
@@ -34,6 +48,50 @@
       position: relative;
     }
 
+    /* ========================= */
+    /* FULL SCREEN TRANSITION */
+    /* ========================= */
+
+    .transition-overlay{
+      position:fixed;
+      inset:0;
+      background:linear-gradient(
+        135deg,
+        #0b1d4d 0%,
+        #0b2a1a 50%,
+        #d4af37 100%
+      );
+      z-index:9999;
+      opacity:0;
+      pointer-events:none;
+      transform:scale(0);
+      border-radius:50%;
+    }
+
+    .transition-overlay.active{
+      animation:fullReveal 1.8s cubic-bezier(.22,.61,.36,1) forwards;
+    }
+
+    @keyframes fullReveal{
+
+      0%{
+        opacity:0;
+        transform:scale(0);
+        border-radius:50%;
+      }
+
+      40%{
+        opacity:1;
+      }
+
+      100%{
+        opacity:1;
+        transform:scale(4);
+        border-radius:0%;
+      }
+
+    }
+
     .paw-bg {
       position: fixed;
       inset: 0;
@@ -41,11 +99,7 @@
       background-color: #0b2a1a;
       background-image:
         repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(11,29,77,0.6) 38px, rgba(11,29,77,0.6) 42px),
-        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(11,29,77,0.6) 38px, rgba(11,29,77,0.6) 42px),
-        repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(212,175,55,0.25) 18px, rgba(212,175,55,0.25) 20px),
-        repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(212,175,55,0.25) 18px, rgba(212,175,55,0.25) 20px),
-        repeating-linear-gradient(0deg, transparent, transparent 76px, rgba(139,0,0,0.2) 76px, rgba(139,0,0,0.2) 79px),
-        repeating-linear-gradient(90deg, transparent, transparent 76px, rgba(139,0,0,0.2) 76px, rgba(139,0,0,0.2) 79px);
+        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(11,29,77,0.6) 38px, rgba(11,29,77,0.6) 42px);
     }
 
     .envelope-wrapper {
@@ -63,9 +117,10 @@
       filter: drop-shadow(0 30px 60px rgba(0,0,0,0.8));
     }
 
-    .envelope:hover { transform: scale(1.02) rotate(-0.5deg); }
+    .envelope:hover {
+      transform: scale(1.02);
+    }
 
-    /* Envelope back */
     .envelope::before {
       content: '';
       position: absolute;
@@ -76,21 +131,12 @@
       z-index: 0;
     }
 
-    .envelope::after {
-      content: '';
-      position: absolute;
-      inset: 7px;
-      border: 1px solid rgba(212,175,55,0.25);
-      border-radius: 2px 2px 10px 10px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Flap */
     .envelope-flap {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 52%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 52%;
       background: linear-gradient(170deg, #0b1d4d 0%, #1a3a5c 50%, #1a4d2e 100%);
       clip-path: polygon(0 0, 100% 0, 50% 95%);
       transform-origin: top center;
@@ -101,29 +147,10 @@
       border-top: 2px solid #d4af37;
     }
 
-    .envelope-flap::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(212,175,55,0.12) 18px, rgba(212,175,55,0.12) 20px),
-        repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(212,175,55,0.12) 18px, rgba(212,175,55,0.12) 20px);
-      clip-path: polygon(0 0, 100% 0, 50% 95%);
-      pointer-events: none;
+    .envelope-flap.open {
+      transform: rotateX(180deg);
     }
 
-    .envelope-flap::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent 0%, #d4af37 30%, #f5e87e 50%, #d4af37 70%, transparent 100%);
-    }
-
-    .envelope-flap.open { transform: rotateX(180deg); }
-
-    /* Body */
     .envelope-body {
       position: absolute;
       inset: 0;
@@ -135,28 +162,6 @@
       justify-content: center;
       overflow: hidden;
       z-index: 1;
-    }
-
-    /* Bottom triangle fold lines */
-    .envelope-body::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(11,29,77,0.03) 48px, rgba(11,29,77,0.03) 49px),
-        repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(11,29,77,0.03) 48px, rgba(11,29,77,0.03) 49px);
-      pointer-events: none;
-    }
-
-    /* Bottom fold V line */
-    .envelope-body::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 52%;
-      clip-path: polygon(0 100%, 50% 0, 100% 100%);
-      background: rgba(0,0,0,0.04);
-      pointer-events: none;
     }
 
     .envelope-letter {
@@ -177,25 +182,19 @@
       box-shadow: 0 2px 16px rgba(0,0,0,0.08);
     }
 
-    .envelope-letter::before {
-      content: '';
-      position: absolute;
-      inset: 5px;
-      border: 1px solid rgba(212,175,55,0.2);
-      border-radius: 3px;
-      pointer-events: none;
+    .envelope-letter.rise {
+      transform: translateY(-190px);
     }
 
-    .envelope-letter.rise { transform: translateY(-190px); }
-
-    .bear-icon { font-size: 2rem; }
+    .bear-icon {
+      font-size: 2rem;
+    }
 
     .envelope-letter h2 {
       font-family: var(--font-display);
       font-size: 0.88rem;
       color: #0b1d4d;
       font-style: italic;
-      font-weight: 700;
     }
 
     .envelope-letter p {
@@ -206,11 +205,11 @@
       text-transform: uppercase;
     }
 
-    /* ===== WAX SEAL on the flap fold ===== */
+    /* WAX SEAL */
+
     .wax-seal {
       position: absolute;
       left: 50%;
-      /* sits right at the flap fold line — 52% of envelope height */
       top: calc(52% - 36px);
       transform: translateX(-50%);
       width: 72px;
@@ -218,11 +217,25 @@
       z-index: 5;
       animation: sealDrop 1s cubic-bezier(.68,-0.55,.27,1.55) 0.4s both;
       pointer-events: none;
+      border-radius:50%;
+      background:radial-gradient(circle,#f0c84a,#8a5200);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      color:white;
+      box-shadow:0 10px 20px rgba(0,0,0,0.5);
     }
 
     @keyframes sealDrop {
-      from { opacity: 0; transform: translateX(-50%) scale(0) rotate(-200deg); }
-      to   { opacity: 1; transform: translateX(-50%) scale(1) rotate(0deg); }
+      from {
+        opacity: 0;
+        transform: translateX(-50%) scale(0) rotate(-200deg);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) scale(1) rotate(0deg);
+      }
     }
 
     .click-hint {
@@ -232,7 +245,6 @@
       transform: translateX(-50%);
       text-align: center;
       color: #e8c99a;
-      font-family: var(--font-body);
       font-size: 0.78rem;
       display: flex;
       flex-direction: column;
@@ -244,38 +256,26 @@
       text-transform: uppercase;
     }
 
-    .pulse-ring {
-      width: 42px; height: 42px;
-      border: 2px solid #d4af37;
-      border-radius: 50%;
-      animation: pulse 1.8s ease infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(2.2); opacity: 0; }
-    }
-
     @keyframes fadeUpIn {
-      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
     }
 
-    /* ============ INVITATION PAGE ============ */
+    /* ========================= */
+    /* INVITATION PAGE */
+    /* ========================= */
+
     .invite-page {
       background: var(--bear-light);
       font-family: var(--font-body);
       color: var(--text-dark);
       overflow-x: hidden;
-    }
-
-    .invite-page.page-enter {
-      animation: pageReveal 0.8s ease both;
-    }
-
-    @keyframes pageReveal {
-      from { opacity: 0; transform: scale(0.96); }
-      to   { opacity: 1; transform: scale(1); }
     }
 
     .hero {
@@ -287,57 +287,58 @@
       position: relative;
       overflow: hidden;
       border-radius: 0 0 40px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      animation:cinematicReveal 1.5s ease;
     }
 
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(212,175,55,0.06) 38px, rgba(212,175,55,0.06) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(212,175,55,0.06) 38px, rgba(212,175,55,0.06) 40px),
-        repeating-linear-gradient(0deg, transparent, transparent 76px, rgba(139,0,0,0.05) 76px, rgba(139,0,0,0.05) 78px),
-        repeating-linear-gradient(90deg, transparent, transparent 76px, rgba(139,0,0,0.05) 76px, rgba(139,0,0,0.05) 78px);
-      pointer-events: none;
-      border-radius: 0 0 40px 40px;
+    @keyframes cinematicReveal{
+
+      0%{
+        opacity:0;
+        transform:scale(1.2);
+        filter:blur(20px);
+      }
+
+      100%{
+        opacity:1;
+        transform:scale(1);
+        filter:blur(0px);
+      }
+
     }
 
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
+    .bg-video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:0.25;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:2;
     }
 
     .bear-emoji {
       font-size: 6rem;
       display: block;
       animation: float 3s ease-in-out infinite;
-      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(-2deg); }
-      50%       { transform: translateY(-14px) rotate(2deg); }
-    }
+      0%,100%{
+        transform:translateY(0);
+      }
 
-    .invite-badge {
-      background: rgba(212,175,55,0.15);
-      border: 1px solid rgba(212,175,55,0.4);
-      color: #d4af37;
-      font-size: 0.68rem;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      font-weight: 700;
-      padding: 6px 22px;
-      border-radius: 50px;
+      50%{
+        transform:translateY(-14px);
+      }
     }
 
     .invite-title {
@@ -345,38 +346,30 @@
       font-size: clamp(3rem, 10vw, 5.5rem);
       font-style: italic;
       color: #f8f4ec;
-      margin: 0;
-      text-shadow: 0 4px 30px rgba(0,0,0,0.4);
-      letter-spacing: 2px;
       line-height: 1.1;
+
+      animation:titleGlow 2s ease infinite alternate;
     }
 
-    .invite-divider {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      width: 280px;
-    }
+    @keyframes titleGlow{
 
-    .invite-divider span {
-      flex: 1;
-      height: 1px;
-      background: rgba(212,175,55,0.4);
-    }
+      from{
+        text-shadow:0 0 10px rgba(212,175,55,0.3);
+      }
 
-    .invite-divider em {
-      color: #d4af37;
-      font-size: 1rem;
-      font-style: normal;
+      to{
+        text-shadow:
+          0 0 20px rgba(212,175,55,0.8),
+          0 0 40px rgba(212,175,55,0.4);
+      }
+
     }
 
     .birthday-name {
       font-family: var(--font-display);
       font-size: clamp(2rem, 6vw, 3.5rem);
       color: #d4af37;
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: 1px;
+      margin-top:20px;
     }
 
     .countdown-section {
@@ -385,20 +378,12 @@
       background: #f8f4ec;
     }
 
-    .countdown-section h3 {
-      font-size: 0.72rem;
-      color: #0b1d4d;
-      text-transform: uppercase;
-      letter-spacing: 5px;
-      margin-bottom: 36px;
-      font-weight: 700;
-    }
-
     .countdown {
       display: flex;
       justify-content: center;
       gap: 16px;
       flex-wrap: wrap;
+      margin-top:40px;
     }
 
     .count-box {
@@ -408,27 +393,18 @@
       padding: 22px 26px;
       min-width: 84px;
       box-shadow: 0 8px 30px rgba(11,29,77,0.3);
-      border: 1px solid rgba(212,175,55,0.3);
       transition: transform 0.2s;
     }
 
-    .count-box:hover { transform: translateY(-4px); }
+    .count-box:hover {
+      transform: translateY(-4px);
+    }
 
     .count-box span {
       display: block;
       font-size: 2.6rem;
       font-weight: 900;
-      line-height: 1;
       color: #d4af37;
-    }
-
-    .count-box label {
-      font-size: 0.62rem;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      opacity: 0.7;
-      margin-top: 6px;
-      display: block;
     }
 
     .details-section {
@@ -446,40 +422,11 @@
       padding: 36px 24px;
       text-align: center;
       box-shadow: 0 8px 32px rgba(11,29,77,0.1);
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .detail-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #0b1d4d, #1a4d2e, #d4af37);
+      transition: transform 0.3s;
     }
 
     .detail-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 16px 48px rgba(11,29,77,0.15);
-    }
-
-    .detail-icon { font-size: 2.4rem; display: block; margin-bottom: 14px; }
-
-    .detail-card h4 {
-      font-size: 0.66rem;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      color: #d4af37;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-
-    .detail-card p {
-      color: #0b1d4d;
-      font-size: 1.05rem;
-      font-weight: 700;
-      line-height: 1.5;
     }
 
     .map-section {
@@ -488,61 +435,12 @@
       margin: 0 auto;
     }
 
-    .section-heading {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      font-style: italic;
-      color: #0b1d4d;
-      margin-bottom: 30px;
-      text-align: center;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-    }
-
-    .section-heading::before,
-    .section-heading::after {
-      content: '';
-      flex: 1;
-      max-width: 80px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #d4af37);
-    }
-
-    .section-heading::after {
-      background: linear-gradient(90deg, #d4af37, transparent);
-    }
-
     .map-wrapper {
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 12px 48px rgba(11,29,77,0.2);
-      border: 3px solid #0b1d4d;
-      cursor: pointer;
-      transition: transform 0.3s;
-      position: relative;
+      cursor:pointer;
     }
-
-    .map-wrapper::after {
-      content: '↗ Open in Maps';
-      position: absolute;
-      top: 14px; right: 14px;
-      background: #0b1d4d;
-      color: #d4af37;
-      font-family: var(--font-body);
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      padding: 6px 14px;
-      border-radius: 50px;
-      border: 1px solid rgba(212,175,55,0.4);
-      pointer-events: none;
-    }
-
-    .map-wrapper:hover { transform: scale(1.01); }
-    .map-wrapper iframe { pointer-events: none; display: block; }
 
     .gallery-section {
       padding: 60px 24px;
@@ -561,21 +459,18 @@
       overflow: hidden;
       aspect-ratio: 1;
       box-shadow: 0 4px 20px rgba(11,29,77,0.12);
-      transition: transform 0.3s, box-shadow 0.3s;
-      background: linear-gradient(135deg, #f0ebe0, #e8e0d0);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      border: 1px solid rgba(212,175,55,0.2);
+      transition: transform 0.3s;
     }
 
     .photo-item:hover {
-      transform: scale(1.04) rotate(1deg);
-      box-shadow: 0 14px 44px rgba(11,29,77,0.2);
+      transform: scale(1.04);
     }
 
-    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     .rsvp-section {
       text-align: center;
@@ -583,39 +478,6 @@
       background: linear-gradient(135deg, #0b1d4d 0%, #0b2a1a 100%);
       color: white;
       border-radius: 40px 40px 0 0;
-      margin-top: 40px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .rsvp-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(212,175,55,0.04) 38px, rgba(212,175,55,0.04) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(212,175,55,0.04) 38px, rgba(212,175,55,0.04) 40px);
-      pointer-events: none;
-    }
-
-    .rsvp-section h3 {
-      font-family: var(--font-display);
-      font-size: 2.6rem;
-      font-style: italic;
-      color: #f8f4ec;
-      margin-bottom: 10px;
-      font-weight: 700;
-      position: relative;
-    }
-
-    .rsvp-section > p {
-      color: #d4af37;
-      margin-bottom: 36px;
-      font-size: 0.82rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      font-weight: 700;
-      position: relative;
     }
 
     .rsvp-buttons {
@@ -623,25 +485,26 @@
       gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
-      position: relative;
+      margin-top:30px;
     }
 
     .rsvp-btn {
       padding: 18px 44px;
       border: none;
       border-radius: 50px;
-      font-family: var(--font-body);
       font-size: 1rem;
       font-weight: 800;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      letter-spacing: 1px;
+      transition: transform 0.2s;
+    }
+
+    .rsvp-btn:hover {
+      transform: scale(1.06);
     }
 
     .rsvp-btn.yes {
       background: linear-gradient(135deg, #d4af37, #f0c84a);
       color: #0b1d4d;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
     }
 
     .rsvp-btn.no {
@@ -650,264 +513,220 @@
       border: 2px solid rgba(248,244,236,0.35);
     }
 
-    .rsvp-btn:hover { transform: scale(1.06); }
-    .rsvp-btn.selected { box-shadow: 0 0 0 4px #d4af37; }
-
-    .rsvp-message {
-      margin-top: 28px;
-      font-size: 1.1rem;
-      min-height: 40px;
-      color: #f8f4ec;
-      position: relative;
-      animation: fadeIn 0.5s ease;
-    }
-
     footer {
       text-align: center;
       padding: 30px 24px;
       background: #060f26;
       color: rgba(212,175,55,0.65);
       font-size: 0.82rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
-
-    .party-time {
-      font-size: 1.5rem;
-      font-weight: 900;
-      color: #d4af37;
-      animation: fadeIn 0.5s ease;
     }
 
     @media (max-width: 480px) {
-      .envelope-wrapper { width: 320px; height: 240px; }
-      .wax-seal { width: 58px; height: 58px; top: calc(52% - 29px); }
-      .photo-grid { grid-template-columns: repeat(2, 1fr); }
-      .countdown { gap: 10px; }
-      .count-box { min-width: 68px; padding: 16px 14px; }
-      .count-box span { font-size: 2rem; }
+
+      .envelope-wrapper {
+        width: 320px;
+        height: 240px;
+      }
+
+      .photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
+
 <body class="envelope-page">
+
+  <!-- FULL SCREEN TRANSITION -->
+  <div class="transition-overlay" id="transitionOverlay"></div>
 
   <div class="paw-bg"></div>
 
   <!-- ENVELOPE -->
   <div class="envelope-wrapper" id="envelopeWrapper">
-    <div class="envelope" id="envelope">
+
+    <div class="envelope">
+
       <div class="envelope-flap" id="flap"></div>
 
       <div class="envelope-body">
+
         <div class="envelope-letter" id="letter">
+
           <span class="bear-icon">🐻</span>
+
           <h2>You have a special message...</h2>
+
           <p>Tap to open</p>
+
         </div>
+
       </div>
 
-      <!-- WAX SEAL sits on the flap fold line -->
+      <!-- WAX SEAL -->
       <div class="wax-seal">
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="waxOuter" cx="38%" cy="32%" r="65%">
-              <stop offset="0%"   stop-color="#f2c040"/>
-              <stop offset="35%"  stop-color="#d4900a"/>
-              <stop offset="70%"  stop-color="#b07010"/>
-              <stop offset="100%" stop-color="#7a4800"/>
-            </radialGradient>
-            <radialGradient id="waxFace" cx="38%" cy="32%" r="60%">
-              <stop offset="0%"   stop-color="#f0c840"/>
-              <stop offset="50%"  stop-color="#c88010"/>
-              <stop offset="100%" stop-color="#9a6200"/>
-            </radialGradient>
-            <radialGradient id="shine" cx="33%" cy="28%" r="38%">
-              <stop offset="0%"   stop-color="rgba(255,245,180,0.55)"/>
-              <stop offset="100%" stop-color="rgba(255,200,0,0)"/>
-            </radialGradient>
-            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.5)"/>
-            </filter>
-          </defs>
-
-          <!-- Drop shadow base -->
-          <ellipse cx="41" cy="44" rx="30" ry="28" fill="rgba(0,0,0,0.3)" filter="url(#softShadow)"/>
-
-          <!-- Wax drip blob — irregular organic shape like real wax -->
-          <path d="
-            M40 8
-            C45 7, 52 9, 57 14
-            C62 18, 65 24, 67 30
-            C69 35, 70 40, 69 45
-            C68 51, 64 56, 59 60
-            C54 64, 48 67, 42 67
-            C36 68, 30 66, 25 62
-            C19 58, 15 52, 13 46
-            C11 40, 11 33, 14 27
-            C17 21, 22 16, 28 13
-            C33 9, 37 8, 40 8Z
-          " fill="url(#waxOuter)"/>
-
-          <!-- Inner slightly lighter circle -->
-          <circle cx="40" cy="38" r="25" fill="url(#waxFace)" opacity="0.7"/>
-
-          <!-- Engraved ring -->
-          <circle cx="40" cy="38" r="23" fill="none" stroke="rgba(255,215,80,0.35)" stroke-width="1"/>
-          <circle cx="40" cy="38" r="21" fill="none" stroke="rgba(100,60,0,0.25)" stroke-width="0.6"/>
-
-          <!-- Shine highlight -->
-          <circle cx="40" cy="38" r="25" fill="url(#shine)"/>
-
-          <!-- ===== POLO BEAR ENGRAVING ===== -->
-          <!-- Bear head -->
-          <circle cx="40" cy="36" r="13" fill="rgba(70,35,0,0.45)"/>
-          <circle cx="40" cy="36" r="12" fill="rgba(90,45,5,0.55)"/>
-
-          <!-- Ears -->
-          <circle cx="30" cy="26" r="5.5" fill="rgba(85,42,3,0.55)"/>
-          <circle cx="50" cy="26" r="5.5" fill="rgba(85,42,3,0.55)"/>
-          <circle cx="30" cy="26" r="3.2" fill="rgba(120,65,10,0.5)"/>
-          <circle cx="50" cy="26" r="3.2" fill="rgba(120,65,10,0.5)"/>
-
-          <!-- Snout -->
-          <ellipse cx="40" cy="39" rx="7.5" ry="5.5" fill="rgba(130,70,10,0.5)"/>
-
-          <!-- Eyes -->
-          <circle cx="36.5" cy="34" r="2" fill="rgba(40,18,0,0.75)"/>
-          <circle cx="43.5" cy="34" r="2" fill="rgba(40,18,0,0.75)"/>
-          <!-- Eye shine -->
-          <circle cx="37.2" cy="33.3" r="0.7" fill="rgba(255,240,160,0.45)"/>
-          <circle cx="44.2" cy="33.3" r="0.7" fill="rgba(255,240,160,0.45)"/>
-
-          <!-- Nose -->
-          <ellipse cx="40" cy="38.5" rx="2.2" ry="1.5" fill="rgba(35,15,0,0.75)"/>
-
-          <!-- Smile -->
-          <path d="M36.5 42.5 Q40 46 43.5 42.5" stroke="rgba(35,15,0,0.65)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-
-          <!-- Polo collar / shirt hint -->
-          <path d="M31.5 48 Q40 53 48.5 48" stroke="rgba(20,60,30,0.6)" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <path d="M35 48 L38 52 L40 50 L42 52 L45 48" stroke="rgba(20,60,30,0.5)" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
-
-          <!-- RL monogram below bear -->
-          <text x="40" y="61.5" text-anchor="middle" font-family="Georgia,serif" font-size="6" font-weight="bold" fill="rgba(30,15,0,0.65)" letter-spacing="2">RL</text>
-        </svg>
+        🐻
       </div>
 
     </div>
+
   </div>
 
   <div class="click-hint" id="clickHint">
-    <div class="pulse-ring"></div>
-    <span>Open Your Invitation</span>
+    Open Your Invitation
   </div>
 
-  <!-- ====== INVITATION PAGE ====== -->
+  <!-- INVITATION PAGE -->
+
   <div id="invitationPage" style="display:none; width:100%;">
 
     <section class="hero">
+
+      <!-- VIDEO -->
+      <video autoplay muted loop playsinline class="bg-video">
+        <source src="video.mp4" type="video/mp4">
+      </video>
+
       <div class="hero-content">
-        <div class="invite-badge">A Special Celebration</div>
+
         <span class="bear-emoji">🐻</span>
+
         <h1 class="invite-title">You're Invited!</h1>
-        <div class="invite-divider">
-          <span></span><em>✦</em><span></span>
-        </div>
-        <h2 class="birthday-name">Liam's Birthday 🎉</h2>
+
+        <h2 class="birthday-name">
+          Liam's Birthday 🎉
+        </h2>
+
       </div>
+
     </section>
+
+    <!-- COUNTDOWN -->
 
     <section class="countdown-section">
-      <h3>The Party Starts In</h3>
-      <div class="countdown" id="countdown">
-        <div class="count-box"><span id="days">00</span><label>Days</label></div>
-        <div class="count-box"><span id="hours">00</span><label>Hours</label></div>
-        <div class="count-box"><span id="minutes">00</span><label>Minutes</label></div>
-        <div class="count-box"><span id="seconds">00</span><label>Seconds</label></div>
+
+      <h2>The Party Starts In</h2>
+
+      <div class="countdown">
+
+        <div class="count-box">
+          <span id="days">00</span>
+          <label>Days</label>
+        </div>
+
+        <div class="count-box">
+          <span id="hours">00</span>
+          <label>Hours</label>
+        </div>
+
+        <div class="count-box">
+          <span id="minutes">00</span>
+          <label>Minutes</label>
+        </div>
+
+        <div class="count-box">
+          <span id="seconds">00</span>
+          <label>Seconds</label>
+        </div>
+
       </div>
+
     </section>
+
+    <!-- DETAILS -->
 
     <section class="details-section">
+
       <div class="detail-card">
-        <span class="detail-icon">📅</span>
-        <h4>Date</h4>
+        <h3>📅 Date</h3>
         <p>Sunday, August 16, 2026</p>
       </div>
+
       <div class="detail-card">
-        <span class="detail-icon">⏰</span>
-        <h4>Time</h4>
+        <h3>⏰ Time</h3>
         <p>6:00 PM onwards</p>
       </div>
+
       <div class="detail-card">
-        <span class="detail-icon">📍</span>
-        <h4>Venue</h4>
-        <p>Raffles Banquets & Catering, Nugegoda</p>
+        <h3>📍 Venue</h3>
+        <p>Raffles Banquets & Catering</p>
       </div>
-      <div class="detail-card">
-        <span class="detail-icon">👔</span>
-        <h4>Dress Code</h4>
-        <p>Smart Casual</p>
-      </div>
+
     </section>
+
+    <!-- MAP -->
 
     <section class="map-section">
-      <h3 class="section-heading">Find Us Here</h3>
+
       <div class="map-wrapper" onclick="openMapLocation()">
+
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.106174005944!2d79.89782557476984!3d6.8778814931209435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25a172dd73385%3A0xf4a491ef4637a9f3!2sRaffles%20Banquets%20%26%20Catering!5e0!3m2!1sen!2slk!4v1779250589085!5m2!1sen!2slk"
-          width="100%" height="420"
+          width="100%"
+          height="420"
           style="border:0;"
-          allowfullscreen loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
+          allowfullscreen
+          loading="lazy">
         </iframe>
+
       </div>
+
     </section>
+
+    <!-- GALLERY -->
 
     <section class="gallery-section">
-      <h3 class="section-heading">Memories So Far</h3>
+
       <div class="photo-grid">
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
+
+        <div class="photo-item">
+          <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop">
+        </div>
+
+        <div class="photo-item">
+          <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=800&auto=format&fit=crop">
+        </div>
+
+        <div class="photo-item">
+          <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=800&auto=format&fit=crop">
+        </div>
+
       </div>
+
     </section>
 
+    <!-- RSVP -->
+
     <section class="rsvp-section">
-      <h3>🐻 Will You Be There?</h3>
-      <p>Kindly respond by August 9th</p>
+
+      <h2>🐻 Will You Be There?</h2>
+
       <div class="rsvp-buttons">
-        <button class="rsvp-btn yes" onclick="rsvp('yes')">🎉 Yes, I'll be there!</button>
-        <button class="rsvp-btn no" onclick="rsvp('no')">😢 Sorry, can't make it</button>
+
+        <button class="rsvp-btn yes" onclick="rsvp('yes')">
+          🎉 Yes
+        </button>
+
+        <button class="rsvp-btn no" onclick="rsvp('no')">
+          😢 No
+        </button>
+
       </div>
-      <div class="rsvp-message" id="rsvpMessage"></div>
+
+      <div id="rsvpMessage" style="margin-top:20px;"></div>
+
     </section>
 
     <footer>
-      <span>🐾</span>
-      <p>Made with love for a beary special day</p>
-      <span>🐾</span>
+      🐻 Made with love for a beary special day
     </footer>
 
   </div>
 
   <script>
+
     const flap    = document.getElementById('flap');
     const letter  = document.getElementById('letter');
     const hint    = document.getElementById('clickHint');
@@ -917,73 +736,149 @@
     document.body.addEventListener('click', openEnvelope);
 
     function openEnvelope() {
+
       document.body.removeEventListener('click', openEnvelope);
+
       hint.style.display = 'none';
+
       flap.classList.add('open');
-      setTimeout(() => letter.classList.add('rise'), 500);
+
       setTimeout(() => {
+        letter.classList.add('rise');
+      }, 500);
+
+      /* CONFETTI */
+
+      setTimeout(() => {
+
+        confetti({
+          particleCount: 180,
+          spread: 120,
+          origin: { y: 0.6 }
+        });
+
+      }, 1200);
+
+      /* FULL SCREEN TRANSITION */
+
+      setTimeout(() => {
+
+        document
+          .getElementById('transitionOverlay')
+          .classList.add('active');
+
+      }, 1000);
+
+      /* OPEN PAGE */
+
+      setTimeout(() => {
+
         envWrap.style.display = 'none';
+
         document.querySelector('.paw-bg').style.display = 'none';
+
         document.body.classList.remove('envelope-page');
-        document.body.classList.add('invite-page', 'page-enter');
-        document.body.style.background = '';
+
+        document.body.classList.add('invite-page');
+
         invPage.style.display = 'block';
+
         startCountdown();
-        initScrollReveal();
-      }, 1900);
+
+      }, 2200);
+
     }
+
+    /* COUNTDOWN */
 
     function startCountdown() {
-      const partyDate = new Date('2026-08-16T18:00:00');
+
+      const partyDate =
+      new Date('2026-08-16T18:00:00');
+
       function update() {
-        const diff = partyDate - new Date();
+
+        const diff =
+        partyDate - new Date();
+
         if (diff <= 0) {
-          document.getElementById('countdown').innerHTML =
-            '<div class="party-time">🎉 The party is NOW! 🎉</div>';
+
+          document.querySelector('.countdown')
+          .innerHTML =
+          '<h2>🎉 Party Time 🎉</h2>';
+
           return;
         }
-        const d = Math.floor(diff / (1000*60*60*24));
-        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-        const s = Math.floor((diff % (1000*60)) / 1000);
-        document.getElementById('days').textContent    = String(d).padStart(2,'0');
-        document.getElementById('hours').textContent   = String(h).padStart(2,'0');
-        document.getElementById('minutes').textContent = String(m).padStart(2,'0');
-        document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+
+        const d =
+        Math.floor(diff / (1000*60*60*24));
+
+        const h =
+        Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+
+        const m =
+        Math.floor((diff % (1000*60*60)) / (1000*60));
+
+        const s =
+        Math.floor((diff % (1000*60)) / 1000);
+
+        document.getElementById('days').textContent =
+        String(d).padStart(2,'0');
+
+        document.getElementById('hours').textContent =
+        String(h).padStart(2,'0');
+
+        document.getElementById('minutes').textContent =
+        String(m).padStart(2,'0');
+
+        document.getElementById('seconds').textContent =
+        String(s).padStart(2,'0');
+
       }
+
       update();
-      setInterval(update, 1000);
+
+      setInterval(update,1000);
+
     }
+
+    /* RSVP */
 
     function rsvp(choice) {
-      const msg = document.getElementById('rsvpMessage');
-      document.querySelectorAll('.rsvp-btn').forEach(b => b.classList.remove('selected'));
-      document.querySelector('.rsvp-btn.' + choice).classList.add('selected');
+
+      const msg =
+      document.getElementById('rsvpMessage');
+
       if (choice === 'yes') {
-        msg.textContent = "🐻 Beary excited to see you there! Redirecting to RSVP form...";
-        setTimeout(() => {
-          window.open('https://docs.google.com/forms/d/e/1FAIpQLSexISLfxqGcsKy_JEkyF6F7jxFVDRNcvr78aQcw27cky8GV1A/viewform?usp=publish-editor', '_blank');
-        }, 1000);
+
+        msg.innerHTML =
+        "🐻 Beary excited to see you there!";
+
+        confetti({
+          particleCount:100,
+          spread:70
+        });
+
       } else {
-        msg.textContent = "😢 We'll miss you! We'll save some cake for you 🍰";
+
+        msg.innerHTML =
+        "😢 We'll miss you!";
+
       }
+
     }
+
+    /* MAP */
 
     function openMapLocation() {
-      window.open('https://www.google.com/maps/place/Raffles+Banquets+%26+Catering/@6.8778815,79.8978256,15z', '_blank');
+
+      window.open(
+        'https://www.google.com/maps/place/Raffles+Banquets+%26+Catering/',
+        '_blank'
+      );
+
     }
 
-    function initScrollReveal() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.style.animation = 'slideUp 0.7s ease both';
-          }
-        });
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.detail-card, .photo-item, .count-box, .countdown-section, .details-section, .map-section, .gallery-section, .rsvp-section')
-        .forEach(el => observer.observe(el));
-    }
   </script>
 
 </body>
