@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>You're Invited! 🐻</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet"/>
   <style>
@@ -21,9 +21,14 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    .envelope-page {
+    body {
       background: #0b2a1a;
+      overflow-x: hidden;
+    }
+
+    .envelope-page {
       min-height: 100vh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -34,58 +39,57 @@
       position: relative;
     }
 
-    .paw-bg {
+    /* Envelope Base Container */
+    .envelope-wrapper {
       position: fixed;
       inset: 0;
-      pointer-events: none;
-      background-color: #0b2a1a;
-    }
-
-    /* Envelope wrapper takes full screen dimensions */
-    .envelope-wrapper {
-      position: relative;
       width: 100%;
-      height: 100vh;
-      z-index: 1;
+      height: 100%;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: linear-gradient(135deg, #113820 0%, #061910 100%);
     }
 
-    /* Envelope background container */
     .envelope {
       width: 100%;
-      height: 100vh;
+      height: 100%;
       position: relative;
-      background: linear-gradient(135deg, #113820 0%, #061910 100%);
-      perspective: 1500px; /* Enhances the 3D flip effect */
+      perspective: 1500px;
     }
 
-    /* BEAUTIFUL TRIANGLE FLAP (Takes full screen and meets at center-bottom) */
+    /* FIXED TRIANGLE FLAP: Using aspect-ratio to lock the proportions. 
+       This prevents the triangle from stretching/stretching vertically on taller phone screens.
+    */
     .envelope-flap {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 60vh; /* Extends down past center for prominent triangle look */
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      /* Sets a stable mathematical proportion (Width to Height) so it never stretches */
+      aspect-ratio: 4 / 3; 
+      max-height: 45vh;
       background: linear-gradient(170deg, #0b1d4d 0%, #1a3a5c 50%, #1a4d2e 100%);
-      clip-path: polygon(0 0, 100% 0, 50% 100%); /* Perfect Triangle Shape */
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
       transform-origin: top center;
-      transition: transform 0.9s cubic-bezier(.6,-0.28,.735,.045), opacity 0.4s ease;
-      z-index: 3;
-      filter: drop-shadow(0px 8px 15px rgba(0, 0, 0, 0.5));
+      transition: transform 1s cubic-bezier(.6,-0.28,.735,.045), opacity 0.4s ease;
+      z-index: 13;
+      filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.45));
     }
 
-    /* Decorative border inside the triangle flap */
+    /* Golden inner lining */
     .envelope-flap::before {
       content: '';
       position: absolute;
       inset: 0;
       clip-path: polygon(0 0, 100% 0, 50% 100%);
-      border-left: 3px solid rgba(212, 175, 55, 0.6);
-      border-right: 3px solid rgba(212, 175, 55, 0.6);
+      border-left: 4px solid rgba(212, 175, 55, 0.6);
+      border-right: 4px solid rgba(212, 175, 55, 0.6);
       pointer-events: none;
     }
 
-    /* Elegant gold line highlight on the triangle edges */
+    /* Sharp gold tip line */
     .envelope-flap::after {
       content: '';
       position: absolute;
@@ -96,25 +100,32 @@
       pointer-events: none;
     }
 
-    /* Flap opens upward gracefully into 3D space */
     .envelope-flap.open { 
       transform: rotateX(160deg) translateY(-20px);
       z-index: 1;
       opacity: 0;
     }
 
-    /* ===== WAX SEAL perfectly locked on the triangle tip ===== */
+    /* ===== WAX SEAL AUTOMATICALLY LOCKED TO THE TIP ===== */
     .wax-seal {
       position: absolute;
       left: 50%;
-      top: 60vh; /* Attached exactly to the 60vh bottom tip of the triangle */
+      /* Dynamic top calculation based on the flap aspect-ratio to keep it perfectly at the tip */
+      top: calc(100vw * (3 / 4)); 
+      max-top: 45vh;
       transform: translate(-50%, -50%);
-      width: 86px;
-      height: 86px;
-      z-index: 5;
-      animation: sealDrop 1s cubic-bezier(.68,-0.55,.27,1.55) 0.4s both;
+      width: 84px;
+      height: 84px;
+      z-index: 15;
+      animation: sealDrop 1s cubic-bezier(.68,-0.55,.27,1.55) 0.2s both;
       pointer-events: none;
-      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+      filter: drop-shadow(0 5px 12px rgba(0,0,0,0.45));
+    }
+
+    /* Fix overlay constraints for super tall screens like iPhone 'X+' or Sony Xperia */
+    @media (min-aspect-ratio: 1/2) and (max-width: 480px) {
+      .envelope-flap { aspect-ratio: 4 / 3.2; }
+      .wax-seal { top: calc(100vw * (3.2 / 4)); }
     }
 
     @keyframes sealDrop {
@@ -122,43 +133,42 @@
       to   { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
     }
 
-    /* Seal rides up smoothly with the flap opening */
     .wax-seal.open {
-      transform: translate(-50%, -100vh) scale(0.6);
+      transform: translate(-50%, -100vh) scale(0.5);
       opacity: 0;
-      transition: transform 0.9s cubic-bezier(.6,-0.28,.735,.045), opacity 0.5s ease;
+      transition: transform 1s cubic-bezier(.6,-0.28,.735,.045), opacity 0.5s ease;
     }
 
     .click-hint {
-      position: fixed;
-      bottom: 44px;
+      position: absolute;
+      bottom: 8vh;
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
       color: #ffffff;
       font-family: var(--font-body);
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
-      animation: fadeUpIn 1s ease 1.5s both;
+      gap: 12px;
+      animation: fadeUpIn 1s ease 1.2s both;
       font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      z-index: 6;
+      z-index: 16;
     }
 
     .pulse-ring {
-      width: 42px; height: 42px;
-      border: 2px solid #ffffff;
+      width: 44px; height: 44px;
+      border: 2px solid #d4af37;
       border-radius: 50%;
       animation: pulse 1.8s ease infinite;
     }
 
     @keyframes pulse {
       0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(2.2); opacity: 0; }
+      100% { transform: scale(2); opacity: 0; }
     }
 
     @keyframes fadeUpIn {
@@ -171,27 +181,30 @@
       background: var(--bear-light);
       font-family: var(--font-body);
       color: var(--text-dark);
-      overflow-x: hidden;
     }
 
-    .invite-page.page-enter {
-      animation: pageReveal 0.8s ease both;
+    #invitationPage {
+      width: 100%;
+    }
+
+    .invite-page .page-enter-anim {
+      animation: pageReveal 0.8s cubic-bezier(0.25, 1, 0.5, 1) both;
     }
 
     @keyframes pageReveal {
-      from { opacity: 0; transform: scale(0.96); }
+      from { opacity: 0; transform: scale(0.97); }
       to   { opacity: 1; transform: scale(1); }
     }
 
     .hero {
       text-align: center;
       min-height: 100vh;
-      padding: 80px 20px;
+      padding: 60px 20px;
       background: linear-gradient(160deg, #0b1d4d 0%, #0b2a1a 100%);
       color: white;
       position: relative;
       overflow: hidden;
-      border-radius: 0 0 40px 40px;
+      border-radius: 0 0 35px 35px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -205,119 +218,115 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
     }
 
     .bear-emoji {
-      font-size: 6rem;
+      font-size: 5.5rem;
       display: block;
       animation: float 3s ease-in-out infinite;
-      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
+      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.3));
     }
 
     @keyframes float {
       0%, 100% { transform: translateY(0px) rotate(-2deg); }
-      50%       { transform: translateY(-14px) rotate(2deg); }
+      50%       { transform: translateY(-12px) rotate(2deg); }
     }
 
     .invite-badge {
       background: rgba(212,175,55,0.15);
       border: 1px solid rgba(212,175,55,0.4);
       color: #d4af37;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       letter-spacing: 4px;
       text-transform: uppercase;
       font-weight: 700;
-      padding: 6px 22px;
+      padding: 6px 20px;
       border-radius: 50px;
     }
 
     .invite-title {
       font-family: var(--font-display);
-      font-size: clamp(3rem, 10vw, 5.5rem);
+      font-size: clamp(2.8rem, 11vw, 5rem);
       font-style: italic;
       color: #f8f4ec;
       margin: 0;
-      text-shadow: 0 4px 30px rgba(0,0,0,0.4);
-      letter-spacing: 2px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      letter-spacing: 1px;
       line-height: 1.1;
     }
 
     .invite-divider {
       display: flex;
       align-items: center;
-      gap: 16px;
-      width: 280px;
+      gap: 14px;
+      width: 240px;
     }
 
     .invite-divider span {
       flex: 1;
       height: 1px;
-      background: rgba(212,175,55,0.4);
+      background: rgba(212,175,55,0.3);
     }
 
     .invite-divider em {
       color: #d4af37;
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-style: normal;
     }
 
     .birthday-name {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-size: clamp(2rem, 7vw, 3.2rem);
       color: #d4af37;
       margin: 0;
       font-weight: 700;
-      letter-spacing: 1px;
     }
 
     .countdown-section {
       text-align: center;
-      padding: 60px 20px;
+      padding: 50px 20px;
       background: #f8f4ec;
     }
 
     .countdown-section h3 {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: #0b1d4d;
       text-transform: uppercase;
-      letter-spacing: 5px;
-      margin-bottom: 36px;
+      letter-spacing: 4px;
+      margin-bottom: 28px;
       font-weight: 700;
     }
 
     .countdown {
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .count-box {
       background: linear-gradient(135deg, #0b1d4d 0%, #0b2a1a 100%);
       color: #f8f4ec;
-      border-radius: 16px;
-      padding: 22px 26px;
-      min-width: 84px;
-      box-shadow: 0 8px 30px rgba(11,29,77,0.3);
-      border: 1px solid rgba(212,175,55,0.3);
-      transition: transform 0.2s;
+      border-radius: 14px;
+      padding: 18px 16px;
+      min-width: 76px;
+      box-shadow: 0 6px 20px rgba(11,29,77,0.2);
+      border: 1px solid rgba(212,175,55,0.25);
     }
-
-    .count-box:hover { transform: translateY(-4px); }
 
     .count-box span {
       display: block;
-      font-size: 2.6rem;
-      font-weight: 900;
+      font-size: 2.2rem;
+      font-weight: 800;
       line-height: 1;
       color: #d4af37;
     }
 
     .count-box label {
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       text-transform: uppercase;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       opacity: 0.7;
       margin-top: 6px;
       display: block;
@@ -325,22 +334,21 @@
 
     .details-section {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 24px;
-      padding: 60px 24px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 40px 20px;
       max-width: 1000px;
       margin: 0 auto;
     }
 
     .detail-card {
       background: white;
-      border-radius: 24px;
-      padding: 36px 24px;
+      border-radius: 20px;
+      padding: 30px 20px;
       text-align: center;
-      box-shadow: 0 8px 32px rgba(11,29,77,0.1);
+      box-shadow: 0 6px 24px rgba(11,29,77,0.08);
       position: relative;
       overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
     }
 
     .detail-card::before {
@@ -351,93 +359,76 @@
       background: linear-gradient(90deg, #0b1d4d, #1a4d2e, #d4af37);
     }
 
-    .detail-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 48px rgba(11,29,77,0.15);
-    }
-
-    .detail-icon { font-size: 2.4rem; display: block; margin-bottom: 14px; }
+    .detail-icon { font-size: 2.2rem; display: block; margin-bottom: 12px; }
 
     .detail-card h4 {
-      font-size: 0.66rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       color: #d4af37;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-weight: 700;
     }
 
     .detail-card p {
       color: #0b1d4d;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
     .map-section {
-      padding: 60px 24px;
+      padding: 40px 20px;
       max-width: 960px;
       margin: 0 auto;
     }
 
     .section-heading {
       font-family: var(--font-display);
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-style: italic;
       color: #0b1d4d;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
       text-align: center;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .section-heading::before,
-    .section-heading::after {
+    .section-heading::before, .section-heading::after {
       content: '';
       flex: 1;
-      max-width: 80px;
+      max-width: 60px;
       height: 1px;
       background: linear-gradient(90deg, transparent, #d4af37);
     }
 
-    .section-heading::after {
-      background: linear-gradient(90deg, #d4af37, transparent);
-    }
+    .section-heading::after { background: linear-gradient(90deg, #d4af37, transparent); }
 
     .map-wrapper {
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 12px 48px rgba(11,29,77,0.2);
-      border: 3px solid #0b1d4d;
-      cursor: pointer;
-      transition: transform 0.3s;
+      box-shadow: 0 10px 36px rgba(11,29,77,0.15);
+      border: 2px solid #0b1d4d;
       position: relative;
     }
 
     .map-wrapper::after {
-      content: '↗ Open in Maps';
+      content: '↗ Open Maps';
       position: absolute;
-      top: 14px; right: 14px;
+      top: 12px; right: 12px;
       background: #0b1d4d;
       color: #d4af37;
-      font-family: var(--font-body);
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 700;
-      letter-spacing: 1px;
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: 50px;
-      border: 1px solid rgba(212,175,55,0.4);
-      pointer-events: none;
     }
 
-    .map-wrapper:hover { transform: scale(1.01); }
-    .map-wrapper iframe { pointer-events: none; display: block; }
-
     .gallery-section {
-      padding: 60px 24px;
+      padding: 40px 20px;
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -445,146 +436,110 @@
     .photo-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      gap: 10px;
     }
 
     .photo-item {
-      border-radius: 18px;
+      border-radius: 14px;
       overflow: hidden;
       aspect-ratio: 1;
-      box-shadow: 0 4px 20px rgba(11,29,77,0.12);
-      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 15px rgba(11,29,77,0.08);
       background: linear-gradient(135deg, #f0ebe0, #e8e0d0);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
-      border: 1px solid rgba(212,175,55,0.2);
+      font-size: 2rem;
     }
-
-    .photo-item:hover {
-      transform: scale(1.04) rotate(1deg);
-      box-shadow: 0 14px 44px rgba(11,29,77,0.2);
-    }
-
-    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
 
     .rsvp-section {
       text-align: center;
-      padding: 80px 24px;
+      padding: 60px 20px;
       background: linear-gradient(135deg, #0b1d4d 0%, #0b2a1a 100%);
       color: white;
-      border-radius: 40px 40px 0 0;
+      border-radius: 30px 30px 0 0;
       margin-top: 40px;
-      position: relative;
-      overflow: hidden;
     }
 
     .rsvp-section h3 {
       font-family: var(--font-display);
-      font-size: 2.6rem;
+      font-size: 2.2rem;
       font-style: italic;
       color: #f8f4ec;
-      margin-bottom: 10px;
-      font-weight: 700;
-      position: relative;
+      margin-bottom: 8px;
     }
 
     .rsvp-section > p {
       color: #d4af37;
-      margin-bottom: 36px;
-      font-size: 0.82rem;
-      letter-spacing: 3px;
+      margin-bottom: 28px;
+      font-size: 0.78rem;
+      letter-spacing: 2px;
       text-transform: uppercase;
       font-weight: 700;
-      position: relative;
     }
 
     .rsvp-buttons {
       display: flex;
-      gap: 16px;
+      gap: 12px;
       justify-content: center;
       flex-wrap: wrap;
-      position: relative;
     }
 
     .rsvp-btn {
-      padding: 18px 44px;
+      padding: 16px 36px;
       border: none;
       border-radius: 50px;
       font-family: var(--font-body);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 800;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
     .rsvp-btn.yes {
       background: linear-gradient(135deg, #d4af37, #f0c84a);
       color: #0b1d4d;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+      box-shadow: 0 6px 20px rgba(212,175,55,0.3);
     }
 
     .rsvp-btn.no {
       background: transparent;
       color: #f8f4ec;
-      border: 2px solid rgba(248,244,236,0.35);
+      border: 2px solid rgba(248,244,236,0.3);
     }
 
     .rsvp-message {
-      margin-top: 28px;
-      font-size: 1.1rem;
-      min-height: 40px;
+      margin-top: 24px;
+      font-size: 1rem;
+      min-height: 35px;
       color: #f8f4ec;
-      position: relative;
-      animation: fadeIn 0.5s ease;
     }
 
     footer {
       text-align: center;
-      padding: 30px 24px;
+      padding: 24px;
       background: #060f26;
-      color: rgba(212,175,55,0.65);
-      font-size: 0.82rem;
+      color: rgba(212,175,55,0.6);
+      font-size: 0.78rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
+      gap: 10px;
       font-weight: 600;
-      letter-spacing: 1px;
-    }
-
-    .party-time {
-      font-size: 1.5rem;
-      font-weight: 900;
-      color: #d4af37;
-      animation: fadeIn 0.5s ease;
     }
 
     @media (max-width: 480px) {
-      .envelope-flap { height: 55vh; }
-      .wax-seal { top: 55vh; width: 78px; height: 78px; }
       .photo-grid { grid-template-columns: repeat(2, 1fr); }
-      .countdown { gap: 10px; }
-      .count-box { min-width: 68px; padding: 16px 14px; }
-      .count-box span { font-size: 2rem; }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+      .count-box { min-width: 70px; padding: 14px 10px; }
+      .count-box span { font-size: 1.8rem; }
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(40px); }
+      from { opacity: 0; transform: translateY(30px); }
       to   { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body class="envelope-page">
-
-  <div class="paw-bg"></div>
 
   <div class="envelope-wrapper" id="envelopeWrapper">
     <div class="envelope" id="envelope">
@@ -613,52 +568,20 @@
               <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.5)"/>
             </filter>
           </defs>
-
           <ellipse cx="41" cy="44" rx="30" ry="28" fill="rgba(0,0,0,0.3)" filter="url(#softShadow)"/>
-
-          <path d="
-            M40 8
-            C45 7, 52 9, 57 14
-            C62 18, 65 24, 67 30
-            C69 35, 70 40, 69 45
-            C68 51, 64 56, 59 60
-            C54 64, 48 67, 42 67
-            C36 68, 30 66, 25 62
-            C19 58, 15 52, 13 46
-            C11 40, 11 33, 14 27
-            C17 21, 22 16, 28 13
-            C33 9, 37 8, 40 8Z
-          " fill="url(#waxOuter)"/>
-
+          <path d="M40 8 C45 7, 52 9, 57 14 C62 18, 65 24, 67 30 C69 35, 70 40, 69 45 C68 51, 64 56, 59 60 C54 64, 48 67, 42 67 C36 68, 30 66, 25 62 C19 58, 15 52, 13 46 C11 40, 11 33, 14 27 C17 21, 22 16, 28 13 C33 9, 37 8, 40 8Z" fill="url(#waxOuter)"/>
           <circle cx="40" cy="38" r="25" fill="url(#waxFace)" opacity="0.7"/>
-
           <circle cx="40" cy="38" r="23" fill="none" stroke="rgba(255,215,80,0.35)" stroke-width="1"/>
-          <circle cx="40" cy="38" r="21" fill="none" stroke="rgba(100,60,0,0.25)" stroke-width="0.6"/>
-
           <circle cx="40" cy="38" r="25" fill="url(#shine)"/>
-
           <circle cx="40" cy="36" r="13" fill="rgba(70,35,0,0.45)"/>
           <circle cx="40" cy="36" r="12" fill="rgba(90,45,5,0.55)"/>
-
           <circle cx="30" cy="26" r="5.5" fill="rgba(85,42,3,0.55)"/>
           <circle cx="50" cy="26" r="5.5" fill="rgba(85,42,3,0.55)"/>
-          <circle cx="30" cy="26" r="3.2" fill="rgba(120,65,10,0.5)"/>
-          <circle cx="50" cy="26" r="3.2" fill="rgba(120,65,10,0.5)"/>
-
           <ellipse cx="40" cy="39" rx="7.5" ry="5.5" fill="rgba(130,70,10,0.5)"/>
-
           <circle cx="36.5" cy="34" r="2" fill="rgba(40,18,0,0.75)"/>
           <circle cx="43.5" cy="34" r="2" fill="rgba(40,18,0,0.75)"/>
-          <circle cx="37.2" cy="33.3" r="0.7" fill="rgba(255,240,160,0.45)"/>
-          <circle cx="44.2" cy="33.3" r="0.7" fill="rgba(255,240,160,0.45)"/>
-
-          <ellipse cx="40" cy="38.5" rx="2.2" ry="1.5" fill="rgba(35,15,0,0.75)"/>
-
           <path d="M36.5 42.5 Q40 46 43.5 42.5" stroke="rgba(35,15,0,0.65)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-
           <path d="M31.5 48 Q40 53 48.5 48" stroke="rgba(20,60,30,0.6)" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <path d="M35 48 L38 52 L40 50 L42 52 L45 48" stroke="rgba(20,60,30,0.5)" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
-
           <text x="40" y="61.5" text-anchor="middle" font-family="Georgia,serif" font-size="6" font-weight="bold" fill="rgba(30,15,0,0.65)" letter-spacing="2">RL</text>
         </svg>
       </div>
@@ -668,97 +591,96 @@
 
   <div class="click-hint" id="clickHint">
     <div class="pulse-ring"></div>
-    <span>Open Your Invitation</span>
+    <span>Tap to Open</span>
   </div>
 
-  <div id="invitationPage" style="display:none; width:100%;">
-
-    <section class="hero">
-      <div class="hero-content">
-        <div class="invite-badge">A Special Celebration</div>
-        <span class="bear-emoji">🐻</span>
-        <h1 class="invite-title">You're Invited!</h1>
-        <div class="invite-divider">
-          <span></span><em>✦</em><span></span>
+  <div id="invitationPage" style="display:none;">
+    <main class="invite-page-content" id="pageContent">
+      <section class="hero">
+        <div class="hero-content">
+          <div class="invite-badge">A Special Celebration</div>
+          <span class="bear-emoji">🐻</span>
+          <h1 class="invite-title">You're Invited!</h1>
+          <div class="invite-divider">
+            <span></span><em>✦</em><span></span>
+          </div>
+          <h2 class="birthday-name">Liam's Birthday 🎉</h2>
         </div>
-        <h2 class="birthday-name">Liam's Birthday 🎉</h2>
-      </div>
-    </section>
+      </section>
 
-    <section class="countdown-section">
-      <h3>The Party Starts In</h3>
-      <div class="countdown" id="countdown">
-        <div class="count-box"><span id="days">00</span><label>Days</label></div>
-        <div class="count-box"><span id="hours">00</span><label>Hours</label></div>
-        <div class="count-box"><span id="minutes">00</span><label>Minutes</label></div>
-        <div class="count-box"><span id="seconds">00</span><label>Seconds</label></div>
-      </div>
-    </section>
+      <section class="countdown-section">
+        <h3>The Party Starts In</h3>
+        <div class="countdown" id="countdown">
+          <div class="count-box"><span id="days">00</span><label>Days</label></div>
+          <div class="count-box"><span id="hours">00</span><label>Hours</label></div>
+          <div class="count-box"><span id="minutes">00</span><label>Minutes</label></div>
+          <div class="count-box"><span id="seconds">00</span><label>Seconds</label></div>
+        </div>
+      </section>
 
-    <section class="details-section">
-      <div class="detail-card">
-        <span class="detail-icon">📅</span>
-        <h4>Date</h4>
-        <p>Sunday, August 16, 2026</p>
-      </div>
-      <div class="detail-card">
-        <span class="detail-icon">⏰</span>
-        <h4>Time</h4>
-        <p>6:00 PM onwards</p>
-      </div>
-      <div class="detail-card">
-        <span class="detail-icon">📍</span>
-        <h4>Venue</h4>
-        <p>Raffles Banquets & Catering, Nugegoda</p>
-      </div>
-      <div class="detail-card">
-        <span class="detail-icon">👔</span>
-        <h4>Dress Code</h4>
-        <p>Smart Casual</p>
-      </div>
-    </section>
+      <section class="details-section">
+        <div class="detail-card">
+          <span class="detail-icon">📅</span>
+          <h4>Date</h4>
+          <p>Sunday, August 16, 2026</p>
+        </div>
+        <div class="detail-card">
+          <span class="detail-icon">⏰</span>
+          <h4>Time</h4>
+          <p>6:00 PM onwards</p>
+        </div>
+        <div class="detail-card">
+          <span class="detail-icon">📍</span>
+          <h4>Venue</h4>
+          <p>Raffles Banquets & Catering, Nugegoda</p>
+        </div>
+        <div class="detail-card">
+          <span class="detail-icon">👔</span>
+          <h4>Dress Code</h4>
+          <p>Smart Casual</p>
+        </div>
+      </section>
 
-    <section class="map-section">
-      <h3 class="section-heading">Find Us Here</h3>
-      <div class="map-wrapper" onclick="openMapLocation()">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.106174005944!2d79.89782557476984!3d6.8778814931209435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25a172dd73385%3A0xf4a491ef4637a9f3!2sRaffles%20Banquets%20%26%20Catering!5e0!3m2!1sen!2slk!4v1779250589085!5m2!1sen!2slk"
-          width="100%" height="420"
-          style="border:0;"
-          allowfullscreen loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-    </section>
+      <section class="map-section">
+        <h3 class="section-heading">Find Us Here</h3>
+        <div class="map-wrapper" onclick="openMapLocation()">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.106174005944!2d79.89782557476984!3d6.8778814931209435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25a172dd73385%3A0xf4a491ef4637a9f3!2sRaffles%20Banquets%20%26%20Catering!5e0!3m2!1sen!2slk!4v1779250589085!5m2!1sen!2slk"
+            width="100%" height="360"
+            style="border:0;"
+            allowfullscreen loading="lazy">
+          </iframe>
+        </div>
+      </section>
 
-    <section class="gallery-section">
-      <h3 class="section-heading">Memories So Far</h3>
-      <div class="photo-grid">
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-      </div>
-    </section>
+      <section class="gallery-section">
+        <h3 class="section-heading">Memories So Far</h3>
+        <div class="photo-grid">
+          <div class="photo-item">📸</div>
+          <div class="photo-item">📸</div>
+          <div class="photo-item">📸</div>
+          <div class="photo-item">📸</div>
+          <div class="photo-item">📸</div>
+          <div class="photo-item">📸</div>
+        </div>
+      </section>
 
-    <section class="rsvp-section">
-      <h3>🐻 Will You Be There?</h3>
-      <p>Kindly respond by August 9th</p>
-      <div class="rsvp-buttons">
-        <button class="rsvp-btn yes" onclick="rsvp('yes')">🎉 Yes, I'll be there!</button>
-        <button class="rsvp-btn no" onclick="rsvp('no')">😢 Sorry, can't make it</button>
-      </div>
-      <div class="rsvp-message" id="rsvpMessage"></div>
-    </section>
+      <section class="rsvp-section">
+        <h3>🐻 Will You Be There?</h3>
+        <p>Kindly respond by August 9th</p>
+        <div class="rsvp-buttons">
+          <button class="rsvp-btn yes" onclick="rsvp('yes')">🎉 Yes, I'll be there!</button>
+          <button class="rsvp-btn no" onclick="rsvp('no')">😢 Sorry</button>
+        </div>
+        <div class="rsvp-message" id="rsvpMessage"></div>
+      </section>
 
-    <footer>
-      <span>🐾</span>
-      <p>Made with love for a beary special day</p>
-      <span>🐾</span>
-    </footer>
-
+      <footer>
+        <span>🐾</span>
+        <p>Made with love for a beary special day</p>
+        <span>🐾</span>
+      </footer>
+    </main>
   </div>
 
   <script>
@@ -767,6 +689,7 @@
     const hint    = document.getElementById('clickHint');
     const envWrap = document.getElementById('envelopeWrapper');
     const invPage = document.getElementById('invitationPage');
+    const content = document.getElementById('pageContent');
 
     document.body.addEventListener('click', openEnvelope);
 
@@ -778,14 +701,14 @@
       
       setTimeout(() => {
         envWrap.style.display = 'none';
-        document.querySelector('.paw-bg').style.display = 'none';
         document.body.classList.remove('envelope-page');
-        document.body.classList.add('invite-page', 'page-enter');
-        document.body.style.background = '';
+        document.body.classList.add('invite-page');
         invPage.style.display = 'block';
+        content.classList.add('page-enter-anim');
+        
         startCountdown();
         initScrollReveal();
-      }, 950); /* Perfectly synced transitions as the 3D triangle flap flips up */
+      }, 1000);
     }
 
     function startCountdown() {
@@ -793,8 +716,7 @@
       function update() {
         const diff = partyDate - new Date();
         if (diff <= 0) {
-          document.getElementById('countdown').innerHTML =
-            '<div class="party-time">🎉 The party is NOW! 🎉</div>';
+          document.getElementById('countdown').innerHTML = '<div class="party-time">🎉 The party is NOW! 🎉</div>';
           return;
         }
         const d = Math.floor(diff / (1000*60*60*24));
@@ -812,15 +734,13 @@
 
     function rsvp(choice) {
       const msg = document.getElementById('rsvpMessage');
-      document.querySelectorAll('.rsvp-btn').forEach(b => b.classList.remove('selected'));
-      document.querySelector('.rsvp-btn.' + choice).classList.add('selected');
       if (choice === 'yes') {
-        msg.textContent = "🐻 Beary excited to see you there! Redirecting to RSVP form...";
+        msg.textContent = "🐻 Beary excited to see you there! Redirecting...";
         setTimeout(() => {
           window.open('https://docs.google.com/forms/d/e/1FAIpQLSexISLfxqGcsKy_JEkyF6F7jxFVDRNcvr78aQcw27cky8GV1A/viewform?usp=publish-editor', '_blank');
         }, 1000);
       } else {
-        msg.textContent = "😢 We'll miss you! We'll save some cake for you 🍰";
+        msg.textContent = "😢 We'll miss you!";
       }
     }
 
@@ -832,11 +752,11 @@
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.style.animation = 'slideUp 0.7s ease both';
+            entry.target.style.animation = 'slideUp 0.6s ease both';
           }
         });
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.detail-card, .photo-item, .count-box, .countdown-section, .details-section, .map-section, .gallery-section, .rsvp-section')
+      }, { threshold: 0.05 });
+      document.querySelectorAll('.detail-card, .photo-item, .count-box, .map-wrapper, .rsvp-section')
         .forEach(el => observer.observe(el));
     }
   </script>
