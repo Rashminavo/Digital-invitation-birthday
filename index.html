@@ -167,7 +167,7 @@
     .hero {
       text-align: center;
       min-height: 100vh;
-      padding: 60px 20px 40px;
+      padding: 80px 20px;
       background: linear-gradient(160deg, var(--bear-brown) 0%, var(--bear-dark) 100%);
       color: white;
       position: relative;
@@ -177,6 +177,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 30px;
     }
 
     .hero::before {
@@ -188,9 +189,10 @@
     }
 
     .bear-emoji {
-      font-size: 5rem;
+      font-size: 6rem;
       display: block;
       animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
     }
 
     @keyframes float {
@@ -200,40 +202,45 @@
 
     .invite-title {
       font-family: var(--font-display);
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-size: clamp(3rem, 10vw, 5rem);
       font-style: italic;
       color: var(--bear-cream);
-      margin: 16px 0 8px;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      margin: 0;
+      text-shadow: 0 6px 30px rgba(0,0,0,0.4);
+      letter-spacing: 2px;
     }
 
     .invite-subtitle {
-      font-size: 1rem;
-      color: var(--bear-stripe);
-      letter-spacing: 2px;
+      font-size: 1.2rem;
+      color: var(--bear-cream);
+      letter-spacing: 3px;
       text-transform: uppercase;
+      font-weight: 600;
     }
 
     .birthday-name {
       font-family: var(--font-display);
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-size: clamp(2rem, 6vw, 3.5rem);
       color: var(--bear-accent);
-      margin-top: 10px;
+      margin: 0;
+      font-weight: 700;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     .countdown-section {
       text-align: center;
-      padding: 50px 20px;
-      background: var(--bear-cream);
+      padding: 60px 20px;
+      background: linear-gradient(135deg, var(--bear-light) 0%, rgba(248, 244, 236, 0.8) 100%);
       opacity: 0;
     }
 
     .countdown-section h3 {
-      font-size: 1.1rem;
+      font-size: 1.3rem;
       color: var(--bear-brown);
       text-transform: uppercase;
-      letter-spacing: 3px;
-      margin-bottom: 24px;
+      letter-spacing: 4px;
+      margin-bottom: 40px;
+      font-weight: 700;
     }
 
     .countdown {
@@ -274,21 +281,21 @@
 
     .details-section {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      padding: 40px 24px;
-      max-width: 900px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      padding: 60px 24px;
+      max-width: 1000px;
       margin: 0 auto;
       opacity: 0;
     }
 
     .detail-card {
       background: white;
-      border-radius: 20px;
-      padding: 28px 20px;
+      border-radius: 24px;
+      padding: 35px 25px;
       text-align: center;
-      box-shadow: 0 4px 24px var(--shadow);
-      border-top: 4px solid var(--bear-brown);
+      box-shadow: 0 8px 32px var(--shadow);
+      border-top: 5px solid var(--bear-brown);
       transition: transform 0.3s, box-shadow 0.3s;
       opacity: 0;
     }
@@ -298,32 +305,34 @@
       box-shadow: 0 12px 40px var(--shadow);
     }
 
-    .detail-icon { font-size: 2rem; display: block; margin-bottom: 12px; }
+    .detail-icon { font-size: 2.5rem; display: block; margin-bottom: 16px; }
 
     .detail-card h4 {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       color: var(--bear-accent);
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      font-weight: 700;
     }
 
-    .detail-card p { color: var(--text-dark); font-size: 1.05rem; font-weight: 600; }
+    .detail-card p { color: var(--text-dark); font-size: 1.15rem; font-weight: 700; line-height: 1.6; }
 
     .map-section {
-      padding: 40px 24px;
-      max-width: 900px;
+      padding: 60px 24px;
+      max-width: 950px;
       margin: 0 auto;
       opacity: 0;
     }
 
     .map-section h3 {
       font-family: var(--font-display);
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-style: italic;
       color: var(--bear-dark);
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       text-align: center;
+      font-weight: 700;
     }
 
     .map-wrapper {
@@ -331,22 +340,34 @@
       overflow: hidden;
       box-shadow: 0 8px 40px var(--shadow);
       border: 4px solid var(--bear-brown);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .map-wrapper:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 50px var(--shadow);
+    }
+
+    .map-wrapper iframe {
+      pointer-events: none;
     }
 
     .gallery-section {
-      padding: 40px 24px;
-      max-width: 1000px;
+      padding: 60px 24px;
+      max-width: 1100px;
       margin: 0 auto;
       opacity: 0;
     }
 
     .gallery-section h3 {
       font-family: var(--font-display);
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-style: italic;
       color: var(--bear-dark);
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 35px;
+      font-weight: 700;
     }
 
     .photo-grid {
@@ -381,7 +402,7 @@
 
     .rsvp-section {
       text-align: center;
-      padding: 60px 24px;
+      padding: 70px 24px;
       background: linear-gradient(135deg, var(--bear-brown) 0%, var(--bear-dark) 100%);
       color: white;
       border-radius: 40px 40px 0 0;
@@ -391,10 +412,11 @@
 
     .rsvp-section h3 {
       font-family: var(--font-display);
-      font-size: 2.2rem;
+      font-size: 2.5rem;
       font-style: italic;
       color: var(--bear-cream);
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      font-weight: 700;
     }
 
     .rsvp-section > p { color: var(--bear-stripe); margin-bottom: 30px; }
@@ -407,14 +429,15 @@
     }
 
     .rsvp-btn {
-      padding: 16px 36px;
+      padding: 18px 42px;
       border: none;
       border-radius: 50px;
       font-family: var(--font-body);
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 800;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 1px;
     }
 
     .rsvp-btn.yes { background: var(--bear-cream); color: var(--bear-dark); }
@@ -437,14 +460,15 @@
 
     footer {
       text-align: center;
-      padding: 24px;
+      padding: 32px 24px;
       background: var(--bear-dark);
       color: var(--bear-stripe);
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
+      font-weight: 600;
     }
 
     .bear-paw { font-size: 1.2rem; }
@@ -536,10 +560,10 @@
 
     <section class="map-section">
       <h3>📍 Find Us Here</h3>
-      <div class="map-wrapper">
+      <div class="map-wrapper" onclick="openMapLocation()">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.106174005944!2d79.89782557476984!3d6.8778814931209435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25a172dd73385%3A0xf4a491ef4637a9f3!2sRaffles%20Banquets%20%26%20Catering!5e0!3m2!1sen!2slk!4v1779250589085!5m2!1sen!2slk" 
-          width="600" 
+          width="100%" 
           height="450" 
           style="border:0;" 
           allowfullscreen="" 
@@ -652,6 +676,11 @@
       } else {
         msg.textContent = "😢 We'll miss you! We'll save some cake for you 🍰";
       }
+    }
+
+    // ===== OPEN MAP LOCATION =====
+    function openMapLocation() {
+      window.open('https://www.google.com/maps/place/Raffles+Banquets+%26+Catering/@6.8778815,79.8978256,15z', '_blank');
     }
 
     // ===== SCROLL REVEAL =====
