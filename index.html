@@ -41,7 +41,7 @@
       background-color: #0b2a1a;
     }
 
-    /* Envelope wrapper expands to full screen */
+    /* Envelope wrapper takes full screen dimensions */
     .envelope-wrapper {
       position: relative;
       width: 100%;
@@ -52,54 +52,69 @@
       justify-content: center;
     }
 
-    /* Envelope styled to take up full screen space smoothly */
+    /* Envelope background container */
     .envelope {
       width: 100%;
       height: 100vh;
       position: relative;
-      transition: transform 0.3s ease;
+      background: linear-gradient(135deg, #113820 0%, #061910 100%);
+      perspective: 1500px; /* Enhances the 3D flip effect */
     }
 
-    /* Full-screen Flap / Opening part */
+    /* BEAUTIFUL TRIANGLE FLAP (Takes full screen and meets at center-bottom) */
     .envelope-flap {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 100vh;
+      width: 100%; height: 60vh; /* Extends down past center for prominent triangle look */
       background: linear-gradient(170deg, #0b1d4d 0%, #1a3a5c 50%, #1a4d2e 100%);
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%); /* Perfect Triangle Shape */
       transform-origin: top center;
-      transition: transform 0.8s cubic-bezier(.68,-0.55,.27,1.55);
+      transition: transform 0.9s cubic-bezier(.6,-0.28,.735,.045), opacity 0.4s ease;
       z-index: 3;
-      border-left: 4px solid #d4af37;
-      border-right: 4px solid #d4af37;
-      border-bottom: 4px solid #d4af37;
+      filter: drop-shadow(0px 8px 15px rgba(0, 0, 0, 0.5));
     }
 
+    /* Decorative border inside the triangle flap */
+    .envelope-flap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      border-left: 3px solid rgba(212, 175, 55, 0.6);
+      border-right: 3px solid rgba(212, 175, 55, 0.6);
+      pointer-events: none;
+    }
+
+    /* Elegant gold line highlight on the triangle edges */
     .envelope-flap::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, transparent 0%, #d4af37 30%, #f5e87e 50%, #d4af37 70%, transparent 100%);
+      height: 100%;
+      background: linear-gradient(90deg, #d4af37 0%, #f5e87e 50%, #d4af37 100%);
+      clip-path: polygon(50% 100%, 49% 98%, 0 0, 1px 0, 49.5% 99%, 100% 0, 100% 0);
+      pointer-events: none;
     }
 
-    /* Flap opens upward out of view */
+    /* Flap opens upward gracefully into 3D space */
     .envelope-flap.open { 
-      transform: translateY(-100vh); 
+      transform: rotateX(160deg) translateY(-20px);
+      z-index: 1;
       opacity: 0;
     }
 
-    /* ===== WAX SEAL positioned centered on full screen ===== */
+    /* ===== WAX SEAL perfectly locked on the triangle tip ===== */
     .wax-seal {
       position: absolute;
       left: 50%;
-      top: 50%;
+      top: 60vh; /* Attached exactly to the 60vh bottom tip of the triangle */
       transform: translate(-50%, -50%);
-      width: 90px;
-      height: 90px;
+      width: 86px;
+      height: 86px;
       z-index: 5;
       animation: sealDrop 1s cubic-bezier(.68,-0.55,.27,1.55) 0.4s both;
       pointer-events: none;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
     }
 
     @keyframes sealDrop {
@@ -107,11 +122,11 @@
       to   { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
     }
 
-    /* Seal moves up and fades out when clicked */
+    /* Seal rides up smoothly with the flap opening */
     .wax-seal.open {
-      transform: translate(-50%, -150vh) scale(0.5);
+      transform: translate(-50%, -100vh) scale(0.6);
       opacity: 0;
-      transition: transform 0.8s ease-in, opacity 0.8s ease-in;
+      transition: transform 0.9s cubic-bezier(.6,-0.28,.735,.045), opacity 0.5s ease;
     }
 
     .click-hint {
@@ -182,14 +197,6 @@
       align-items: center;
       justify-content: center;
       gap: 20px;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      border-radius: 0 0 40px 40px;
     }
 
     .hero-content {
@@ -473,13 +480,6 @@
       overflow: hidden;
     }
 
-    .rsvp-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
     .rsvp-section h3 {
       font-family: var(--font-display);
       font-size: 2.6rem;
@@ -532,9 +532,6 @@
       border: 2px solid rgba(248,244,236,0.35);
     }
 
-    .rsvp-btn:hover { transform: scale(1.06); }
-    .rsvp-btn.selected { box-shadow: 0 0 0 4px #d4af37; }
-
     .rsvp-message {
       margin-top: 28px;
       font-size: 1.1rem;
@@ -566,7 +563,8 @@
     }
 
     @media (max-width: 480px) {
-      .wax-seal { width: 76px; height: 76px; }
+      .envelope-flap { height: 55vh; }
+      .wax-seal { top: 55vh; width: 78px; height: 78px; }
       .photo-grid { grid-template-columns: repeat(2, 1fr); }
       .countdown { gap: 10px; }
       .count-box { min-width: 68px; padding: 16px 14px; }
@@ -590,6 +588,7 @@
 
   <div class="envelope-wrapper" id="envelopeWrapper">
     <div class="envelope" id="envelope">
+      
       <div class="envelope-flap" id="flap"></div>
 
       <div class="wax-seal" id="seal">
@@ -786,7 +785,7 @@
         invPage.style.display = 'block';
         startCountdown();
         initScrollReveal();
-      }, 800); /* Transitions smoothly right after flap slide-up animation */
+      }, 950); /* Perfectly synced transitions as the 3D triangle flap flips up */
     }
 
     function startCountdown() {
