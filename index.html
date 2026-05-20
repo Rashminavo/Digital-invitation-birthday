@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>You're Invited! 🐻</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    /* ============ POLO BEAR THEME VARIABLES ============ */
+    :root {
+      --bear-cream: #F5E6C8;
+      --bear-brown: #8B5E3C;
+      --bear-dark: #4A2C0A;
+      --bear-light: #FDF6E3;
+      --bear-accent: #D4956A;
+      --bear-green: #7BA05B;
+      --bear-stripe: #E8C99A;
+      --text-dark: #2D1B00;
+      --shadow: rgba(139, 94, 60, 0.25);
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ============ ENVELOPE PAGE ============ */
+    .envelope-page {
+      background: var(--bear-cream);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .paw-bg {
+      position: fixed;
+      inset: 0;
+      opacity: 0.06;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ccircle cx='20' cy='20' r='8' fill='%238B5E3C'/%3E%3Ccircle cx='40' cy='14' r='6' fill='%238B5E3C'/%3E%3Ccircle cx='58' cy='20' r='8' fill='%238B5E3C'/%3E%3Cellipse cx='38' cy='42' rx='16' ry='18' fill='%238B5E3C'/%3E%3C/svg%3E");
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 340px;
+      height: 240px;
+    }
+
+    .envelope {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      filter: drop-shadow(0 20px 60px var(--shadow));
+      transition: transform 0.3s ease;
+    }
+
+    .envelope:hover { transform: scale(1.03) rotate(-1deg); }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 50%;
+      background: var(--bear-brown);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.6s cubic-bezier(.68,-0.55,.27,1.55);
+      z-index: 2;
+    }
+
+    .envelope-flap.open { transform: rotateX(180deg); }
+
+    .envelope-body {
+      position: absolute;
+      inset: 0;
+      background: var(--bear-brown);
+      border-radius: 4px 4px 12px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .envelope-letter {
+      background: var(--bear-cream);
+      width: 85%;
+      height: 70%;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.8s cubic-bezier(.22,.61,.36,1);
+      transform: translateY(20px);
+    }
+
+    .envelope-letter.rise { transform: translateY(-160px); }
+
+    .bear-icon { font-size: 2rem; }
+
+    .envelope-letter h2 {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      color: var(--bear-dark);
+      font-style: italic;
+    }
+
+    .envelope-letter p {
+      font-size: 0.75rem;
+      color: var(--bear-accent);
+    }
+
+    .click-hint {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: var(--bear-dark);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: fadeUpIn 1s ease 1.5s both;
+    }
+
+    .pulse-ring {
+      width: 40px; height: 40px;
+      border: 2px solid var(--bear-brown);
+      border-radius: 50%;
+      animation: pulse 1.5s ease infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2); opacity: 0; }
+    }
+
+    @keyframes fadeUpIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ============ INVITATION PAGE ============ */
+    .invite-page {
+      background: var(--bear-light);
+      font-family: var(--font-body);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    .invite-page.page-enter {
+      animation: pageReveal 0.8s ease both;
+    }
+
+    @keyframes pageReveal {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: linear-gradient(160deg, var(--bear-brown) 0%, var(--bear-dark) 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0 0 40px 40px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.05) 0%, transparent 70%);
+    }
+
+    .bear-emoji {
+      font-size: 5rem;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      50%       { transform: translateY(-12px) rotate(2deg); }
+    }
+
+    .invite-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-style: italic;
+      color: var(--bear-cream);
+      margin: 16px 0 8px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .invite-subtitle {
+      font-size: 1rem;
+      color: var(--bear-stripe);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .birthday-name {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      color: var(--bear-accent);
+      margin-top: 10px;
+    }
+
+    .countdown-section {
+      text-align: center;
+      padding: 50px 20px;
+      background: var(--bear-cream);
+    }
+
+    .countdown-section h3 {
+      font-size: 1.1rem;
+      color: var(--bear-brown);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 24px;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .count-box {
+      background: var(--bear-brown);
+      color: var(--bear-cream);
+      border-radius: 16px;
+      padding: 20px 24px;
+      min-width: 80px;
+      box-shadow: 0 8px 30px var(--shadow);
+      transition: transform 0.2s;
+    }
+
+    .count-box:hover { transform: translateY(-4px); }
+
+    .count-box span {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .count-box label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.8;
+      margin-top: 4px;
+      display: block;
+    }
+
+    .details-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 40px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .detail-card {
+      background: white;
+      border-radius: 20px;
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: 0 4px 24px var(--shadow);
+      border-top: 4px solid var(--bear-brown);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .detail-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px var(--shadow);
+    }
+
+    .detail-icon { font-size: 2rem; display: block; margin-bottom: 12px; }
+
+    .detail-card h4 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--bear-accent);
+      margin-bottom: 8px;
+    }
+
+    .detail-card p { color: var(--text-dark); font-size: 1.05rem; font-weight: 600; }
+
+    .map-section {
+      padding: 40px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .map-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-style: italic;
+      color: var(--bear-dark);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .map-wrapper {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px var(--shadow);
+      border: 4px solid var(--bear-brown);
+    }
+
+    .gallery-section {
+      padding: 40px 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .gallery-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-style: italic;
+      color: var(--bear-dark);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .photo-item {
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      box-shadow: 0 4px 20px var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      background: var(--bear-cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .photo-item:hover {
+      transform: scale(1.04) rotate(1deg);
+      box-shadow: 0 12px 40px var(--shadow);
+    }
+
+    .photo-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .rsvp-section {
+      text-align: center;
+      padding: 60px 24px;
+      background: linear-gradient(135deg, var(--bear-brown) 0%, var(--bear-dark) 100%);
+      color: white;
+      border-radius: 40px 40px 0 0;
+      margin-top: 40px;
+    }
+
+    .rsvp-section h3 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-style: italic;
+      color: var(--bear-cream);
+      margin-bottom: 8px;
+    }
+
+    .rsvp-section > p { color: var(--bear-stripe); margin-bottom: 30px; }
+
+    .rsvp-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .rsvp-btn {
+      padding: 16px 36px;
+      border: none;
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .rsvp-btn.yes { background: var(--bear-cream); color: var(--bear-dark); }
+
+    .rsvp-btn.no {
+      background: transparent;
+      color: var(--bear-cream);
+      border: 2px solid var(--bear-cream);
+    }
+
+    .rsvp-btn:hover { transform: scale(1.06); }
+    .rsvp-btn.selected { box-shadow: 0 0 0 4px var(--bear-accent); }
+
+    .rsvp-message {
+      margin-top: 24px;
+      font-size: 1.2rem;
+      min-height: 40px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      background: var(--bear-dark);
+      color: var(--bear-stripe);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .bear-paw { font-size: 1.2rem; }
+
+    .party-time {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--bear-brown);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @media (max-width: 480px) {
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
+      .countdown { gap: 10px; }
+      .count-box { min-width: 65px; padding: 14px 16px; }
+      .count-box span { font-size: 2rem; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="envelope-page">
+
+  <div class="paw-bg"></div>
+
+  <div class="envelope-wrapper" id="envelopeWrapper">
+    <div class="envelope" id="envelope">
+      <div class="envelope-flap" id="flap"></div>
+      <div class="envelope-body">
+        <div class="envelope-letter" id="letter">
+          <span class="bear-icon">🐻</span>
+          <h2>You have a special message...</h2>
+          <p>Tap to open</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="click-hint" id="clickHint">
+    <div class="pulse-ring"></div>
+    <span>Open Your Invitation</span>
+  </div>
+
+  <!-- ====== INVITATION PAGE (hidden initially) ====== -->
+  <div id="invitationPage" style="display:none; width:100%;">
+
+    <section class="hero">
+      <span class="bear-emoji">🐻</span>
+      <h1 class="invite-title">You're Invited!</h1>
+      <p class="invite-subtitle">Join us for a Beary Special Celebration</p>
+      <h2 class="birthday-name">Rashmina's Birthday 🎉</h2>
+    </section>
+
+    <section class="countdown-section">
+      <h3>The Party Starts In...</h3>
+      <div class="countdown" id="countdown">
+        <div class="count-box"><span id="days">00</span><label>Days</label></div>
+        <div class="count-box"><span id="hours">00</span><label>Hours</label></div>
+        <div class="count-box"><span id="minutes">00</span><label>Minutes</label></div>
+        <div class="count-box"><span id="seconds">00</span><label>Seconds</label></div>
+      </div>
+    </section>
+
+    <section class="details-section">
+      <div class="detail-card">
+        <span class="detail-icon">📅</span>
+        <h4>Date</h4>
+        <p>Saturday, July 12, 2025</p>
+      </div>
+      <div class="detail-card">
+        <span class="detail-icon">⏰</span>
+        <h4>Time</h4>
+        <p>6:00 PM onwards</p>
+      </div>
+      <div class="detail-card">
+        <span class="detail-icon">📍</span>
+        <h4>Venue</h4>
+        <p>The Bear Garden, Colombo 03</p>
+      </div>
+      <div class="detail-card">
+        <span class="detail-icon">👔</span>
+        <h4>Dress Code</h4>
+        <p>Smart Casual — <strong>Brown & Cream tones</strong></p>
+      </div>
+    </section>
+
+    <section class="map-section">
+      <h3>📍 Find Us Here</h3>
+      <div class="map-wrapper">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63371.81263887193!2d79.82118!3d6.9270786!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo!5e0!3m2!1sen!2slk!4v1620000000000"
+          width="100%" height="350"
+          style="border:0; border-radius:16px;"
+          allowfullscreen loading="lazy">
+        </iframe>
+      </div>
+    </section>
+
+    <section class="gallery-section">
+      <h3>🐾 Memories So Far</h3>
+      <div class="photo-grid">
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+      </div>
+    </section>
+
+    <section class="rsvp-section">
+      <h3>🐻 Will You Be There?</h3>
+      <p>Let us know by <strong>July 5th</strong></p>
+      <div class="rsvp-buttons">
+        <button class="rsvp-btn yes" onclick="rsvp('yes')">🎉 Yes, I'll be there!</button>
+        <button class="rsvp-btn no" onclick="rsvp('no')">😢 Sorry, can't make it</button>
+      </div>
+      <div class="rsvp-message" id="rsvpMessage"></div>
+    </section>
+
+    <footer>
+      <span class="bear-paw">🐾</span>
+      <p>Made with love for a beary special day</p>
+      <span class="bear-paw">🐾</span>
+    </footer>
+
+  </div><!-- end invitationPage -->
+
+  <script>
+    // ===== ENVELOPE OPEN =====
+    const flap   = document.getElementById('flap');
+    const letter = document.getElementById('letter');
+    const hint   = document.getElementById('clickHint');
+    const envWrap = document.getElementById('envelopeWrapper');
+    const invPage = document.getElementById('invitationPage');
+
+    document.body.addEventListener('click', openEnvelope);
+
+    function openEnvelope() {
+      document.body.removeEventListener('click', openEnvelope);
+      hint.style.display = 'none';
+
+      // Open flap
+      flap.classList.add('open');
+
+      // Letter rises
+      setTimeout(() => letter.classList.add('rise'), 500);
+
+      // Switch to invitation
+      setTimeout(() => {
+        envWrap.style.display = 'none';
+        document.body.classList.remove('envelope-page');
+        document.body.classList.add('invite-page', 'page-enter');
+        invPage.style.display = 'block';
+        startCountdown();
+        initScrollReveal();
+      }, 1800);
+    }
+
+    // ===== COUNTDOWN =====
+    function startCountdown() {
+      const partyDate = new Date('2025-07-12T18:00:00');
+
+      function update() {
+        const diff = partyDate - new Date();
+        if (diff <= 0) {
+          document.getElementById('countdown').innerHTML =
+            '<div class="party-time">🎉 The party is NOW! 🎉</div>';
+          return;
+        }
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const s = Math.floor((diff % (1000*60)) / 1000);
+
+        document.getElementById('days').textContent    = String(d).padStart(2,'0');
+        document.getElementById('hours').textContent   = String(h).padStart(2,'0');
+        document.getElementById('minutes').textContent = String(m).padStart(2,'0');
+        document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+      }
+
+      update();
+      setInterval(update, 1000);
+    }
+
+    // ===== RSVP =====
+    function rsvp(choice) {
+      const msg  = document.getElementById('rsvpMessage');
+      const btns = document.querySelectorAll('.rsvp-btn');
+
+      btns.forEach(b => b.classList.remove('selected'));
+      document.querySelector(`.rsvp-btn.${choice}`).classList.add('selected');
+
+      if (choice === 'yes') {
+        msg.textContent = "🐻 Beary excited to see you there! We'll save you a spot!";
+        setTimeout(() => {
+          window.open('https://wa.me/94XXXXXXXXX?text=Hi! I will be attending the party! 🐾', '_blank');
+        }, 1000);
+      } else {
+        msg.textContent = "😢 We'll miss you! We'll save some cake for you 🍰";
+      }
+    }
+
+    // ===== SCROLL REVEAL =====
+    function initScrollReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.animation = 'fadeIn 0.6s ease both';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.detail-card, .photo-item, .count-box')
+        .forEach(el => observer.observe(el));
+    }
+  </script>
+
+</body>
+</html>
