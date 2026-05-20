@@ -34,18 +34,12 @@
       position: relative;
     }
 
+    /* Background checked pattern removed and made into a beautiful plain color */
     .paw-bg {
       position: fixed;
       inset: 0;
       pointer-events: none;
       background-color: #0b2a1a;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(11,29,77,0.6) 38px, rgba(11,29,77,0.6) 42px),
-        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(11,29,77,0.6) 38px, rgba(11,29,77,0.6) 42px),
-        repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(212,175,55,0.25) 18px, rgba(212,175,55,0.25) 20px),
-        repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(212,175,55,0.25) 18px, rgba(212,175,55,0.25) 20px),
-        repeating-linear-gradient(0deg, transparent, transparent 76px, rgba(139,0,0,0.2) 76px, rgba(139,0,0,0.2) 79px),
-        repeating-linear-gradient(90deg, transparent, transparent 76px, rgba(139,0,0,0.2) 76px, rgba(139,0,0,0.2) 79px);
     }
 
     .envelope-wrapper {
@@ -101,13 +95,11 @@
       border-top: 2px solid #d4af37;
     }
 
+    /* Stripe/checked lines pattern removed from the flap overlay */
     .envelope-flap::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(212,175,55,0.12) 18px, rgba(212,175,55,0.12) 20px),
-        repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(212,175,55,0.12) 18px, rgba(212,175,55,0.12) 20px);
       clip-path: polygon(0 0, 100% 0, 50% 95%);
       pointer-events: none;
     }
@@ -137,14 +129,11 @@
       z-index: 1;
     }
 
-    /* Bottom triangle fold lines */
+    /* Grid line pattern removed from the envelope body */
     .envelope-body::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image:
-        repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(11,29,77,0.03) 48px, rgba(11,29,77,0.03) 49px),
-        repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(11,29,77,0.03) 48px, rgba(11,29,77,0.03) 49px);
       pointer-events: none;
     }
 
@@ -294,15 +283,11 @@
       gap: 20px;
     }
 
+    /* Patterns removed from hero page background to match the plain style */
     .hero::after {
       content: '';
       position: absolute;
       inset: 0;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(212,175,55,0.06) 38px, rgba(212,175,55,0.06) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(212,175,55,0.06) 38px, rgba(212,175,55,0.06) 40px),
-        repeating-linear-gradient(0deg, transparent, transparent 76px, rgba(139,0,0,0.05) 76px, rgba(139,0,0,0.05) 78px),
-        repeating-linear-gradient(90deg, transparent, transparent 76px, rgba(139,0,0,0.05) 76px, rgba(139,0,0,0.05) 78px);
       pointer-events: none;
       border-radius: 0 0 40px 40px;
     }
@@ -588,13 +573,11 @@
       overflow: hidden;
     }
 
+    /* Patterns removed from RSVP background to match the plain style */
     .rsvp-section::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(212,175,55,0.04) 38px, rgba(212,175,55,0.04) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(212,175,55,0.04) 38px, rgba(212,175,55,0.04) 40px);
       pointer-events: none;
     }
 
