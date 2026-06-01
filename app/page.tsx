@@ -94,58 +94,23 @@ function TasselBackdrop() {
   );
 }
 
-function GoldCorner({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 86 86" className={className} aria-hidden="true">
-      <path d="M12 74h42c12 0 20-8 20-20V12" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M20 74c0-14 9-22 23-22M74 20c-14 0-22 9-22 23" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M16 68c13-9 5-22 22-28M68 16c-9 13-22 5-28 22" fill="none" stroke="currentColor" strokeWidth="1.3" />
-      <circle cx="22" cy="63" r="3" fill="currentColor" />
-      <circle cx="63" cy="22" r="3" fill="currentColor" />
-      <path d="M8 74h11M74 8v11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function PlaidInvitationCard({ intro }: { intro: boolean }) {
+function PhotoInvitation({ intro }: { intro: boolean }) {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.88, y: 38, filter: "blur(20px)" }}
-      animate={{ opacity: intro ? 0 : 1, scale: intro ? 0.88 : 1, y: intro ? 38 : 0, filter: intro ? "blur(20px)" : "blur(0px)" }}
-      transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
-      className="relative w-full max-w-[520px]"
+      initial={{ opacity: 0, scale: 1.06, filter: "blur(22px)" }}
+      animate={{ opacity: intro ? 0 : 1, scale: intro ? 1.06 : 1, filter: intro ? "blur(22px)" : "blur(0px)" }}
+      transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
+      className="absolute inset-0"
     >
-      <div className="absolute inset-0 translate-y-8 rounded-sm bg-[#1E2A44]/25 blur-2xl" />
-      <div className="plaid-frame relative aspect-[5/7] border border-[#0A1020] p-[clamp(18px,5vw,34px)] shadow-[0_34px_80px_rgba(30,42,68,.38)]">
-        <div className="relative flex h-full flex-col items-center justify-center overflow-hidden border border-[#C8A96B]/70 bg-[#07111F] px-7 py-8 text-center text-[#C8A96B] shadow-[inset_0_0_70px_rgba(0,0,0,.45)]">
-          <div className="absolute inset-3 border border-[#C8A96B]/20" />
-          <GoldCorner className="absolute left-2 top-2 h-16 w-16 text-[#C8A96B]/85" />
-          <GoldCorner className="absolute right-2 top-2 h-16 w-16 rotate-90 text-[#C8A96B]/85" />
-          <GoldCorner className="absolute bottom-2 right-2 h-16 w-16 rotate-180 text-[#C8A96B]/85" />
-          <GoldCorner className="absolute bottom-2 left-2 h-16 w-16 -rotate-90 text-[#C8A96B]/85" />
-
-          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: intro ? 0 : 1, y: intro ? 12 : 0 }} transition={{ delay: 0.25, duration: 0.7 }} className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#D9C7A3]/75 sm:text-sm">
-            Please join us to celebrate
-          </motion.p>
-          <motion.div initial={{ opacity: 0, scale: 0.86 }} animate={{ opacity: intro ? 0 : 1, scale: intro ? 0.86 : 1 }} transition={{ delay: 0.45, duration: 0.8 }} className="my-5 w-36 sm:w-44">
-            <PoloBear />
-          </motion.div>
-          <motion.h1 initial={{ opacity: 0, letterSpacing: "0.75em" }} animate={{ opacity: intro ? 0 : 1, letterSpacing: "0.32em" }} transition={{ delay: 0.65, duration: 1 }} className="font-display ml-[0.32em] text-4xl uppercase text-[#D9C7A3] sm:text-5xl">
-            {baby.name}&apos;s
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: intro ? 0 : 1, y: intro ? 16 : 0 }} transition={{ delay: 0.85, duration: 0.85 }} className="font-display mt-4 text-3xl italic leading-tight text-[#C8A96B] sm:text-5xl">
-            Beary First Birthday
-          </motion.p>
-          <motion.div initial={{ opacity: 0, scaleX: 0.4 }} animate={{ opacity: intro ? 0 : 1, scaleX: intro ? 0.4 : 1 }} transition={{ delay: 1.0, duration: 0.7 }} className="my-6 h-px w-44 bg-[#C8A96B]/50" />
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: intro ? 0 : 1 }} transition={{ delay: 1.15, duration: 0.75 }} className="font-display text-base uppercase tracking-[0.08em] text-[#D9C7A3]/90 sm:text-lg">
-            {baby.displayDate}
-          </motion.p>
-          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: intro ? 0 : 1, y: intro ? 10 : 0 }} transition={{ delay: 1.3, duration: 0.75 }} className="mt-5 font-display text-lg leading-7 text-[#D9C7A3]/80 sm:text-xl">
-            {baby.venue}<br />
-            {baby.address}
-          </motion.p>
-        </div>
-      </div>
+      <Image
+        src="/images/liam-photo.jpg"
+        alt="Liam's first birthday invitation"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
+      />
+      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#1E2A44]/45 to-transparent" />
     </motion.div>
   );
 }
@@ -219,13 +184,13 @@ export default function Home() {
       <AnimatePresence>{intro && <Intro onDone={() => setIntro(false)} />}</AnimatePresence>
       <TasselBackdrop />
       <SparkleField />
-      <section className="relative grid min-h-screen place-items-center overflow-hidden bg-[#F2EFE8] px-4 py-10">
+      <section className="relative min-h-screen overflow-hidden bg-[#F2EFE8]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(200,169,107,.20),transparent_34%),linear-gradient(110deg,rgba(30,42,68,.06),transparent_45%)]" />
         <div className="absolute inset-0 opacity-45 [background-image:radial-gradient(circle_at_1px_1px,rgba(30,42,68,.12)_1px,transparent_0)] [background-size:18px_18px]" />
-        <PlaidInvitationCard intro={intro} />
+        <PhotoInvitation intro={intro} />
         <motion.div animate={{ opacity: intro ? 0 : 1 }} transition={{ delay: 1.35 }} className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center">
           <ChevronDown className="mx-auto animate-bounce text-[#C8A96B]" aria-label="Scroll down" />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#1E2A44]/55">Scroll</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/80">Scroll</span>
         </motion.div>
         <div className="hidden">
           <p className="text-xs font-bold uppercase tracking-[0.45em] text-[#C8A96B]">You are cordially invited</p>
