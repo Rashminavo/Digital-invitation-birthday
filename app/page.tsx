@@ -31,6 +31,10 @@ const milestones = [
   { date: "July 2026", title: "First Steps", detail: "Careful steps forward, cheered on by everyone who loves him." },
   { date: "August 16, 2026", title: "First Birthday", detail: "One beautiful year of cuddles, laughter, wonder, and love." }
 ];
+const contacts = [
+  { name: "Nirmal", phone: "+94 74 381 6127", href: "tel:+94743816127" },
+  { name: "Nirmani", phone: "+94 76 107 8464", href: "tel:+94761078464" }
+];
 const gallery = [
   "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=80",
   "https://images.unsplash.com/photo-1522771930-78848d9293e8?auto=format&fit=crop&w=900&q=80",
@@ -239,6 +243,23 @@ export default function Home() {
         <div className="soft-glow rounded-lg border border-[#C8A96B]/25 bg-white/80 p-7"><MapPin className="mb-4 text-[#C8A96B]" /><h2 className="font-display text-4xl">Venue</h2><p className="mt-4 font-semibold">{baby.venue}</p><p className="mt-2 text-sm leading-6 text-[#1E2A44]/70">{baby.address}</p><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(baby.mapsQuery)}`} target="_blank" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#1E2A44] px-5 py-3 text-sm font-semibold text-white"><Navigation size={16} /> Get Directions</a></div>
         <div className="map-frame h-80 overflow-hidden rounded-lg border border-[#C8A96B]/25"><iframe src={maps} title="Venue map" loading="lazy" /></div>
       </section>
+      <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-4xl px-5 py-12">
+        <div className="gold-line mx-auto mb-5 h-px w-40" />
+        <h2 className="font-display mb-8 text-center text-4xl text-[#1E2A44] sm:text-5xl">Contact Details</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {contacts.map((contact) => (
+            <motion.a key={contact.name} href={contact.href} whileHover={{ y: -5 }} className="soft-glow flex items-center gap-4 rounded-lg border border-[#C8A96B]/25 bg-white/85 p-5">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#1E2A44] text-[#C8A96B]">
+                <Phone size={20} />
+              </span>
+              <span>
+                <span className="font-display block text-2xl text-[#1E2A44]">{contact.name}</span>
+                <span className="mt-1 block text-sm font-medium text-[#1E2A44]/65">{contact.phone}</span>
+              </span>
+            </motion.a>
+          ))}
+        </div>
+      </motion.section>
       <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-4xl px-5 py-16">
         <div className="gold-line mx-auto mb-5 h-px w-40" />
         <h2 className="font-display mb-10 text-center text-4xl text-[#1E2A44] sm:text-5xl">Memory Lane</h2>
