@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { CalendarDays, Camera, Check, ChevronDown, Clock, MapPin, MessageCircle, Navigation, Phone, Sparkles, Users, X } from "lucide-react";
+import { Baby, Cake, CalendarDays, Camera, Check, ChevronDown, Coffee, Gift, MapPin, MessageCircle, Navigation, Phone, Sparkles, Users, X } from "lucide-react";
 import Image from "next/image";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
@@ -16,8 +16,21 @@ const baby = {
   mapsQuery: "Raffles Banquets & Catering 262 Kotte Rd Nugegoda 10250"
 };
 
-const timeline = ["Guest Arrival", "Welcome Drinks", "Cake Cutting", "Lunch", "Family Photos", "Celebration Time"];
-const milestones = ["Born", "First Smile", "First Crawl", "First Steps", "First Birthday"];
+const timeline = [
+  { time: "4:00 PM", title: "Guest Arrival", detail: "A warm welcome with soft music and golden smiles.", icon: Users },
+  { time: "4:30 PM", title: "Welcome Drinks", detail: "Elegant refreshments served as everyone gathers.", icon: Coffee },
+  { time: "5:15 PM", title: "Cake Cutting", detail: "Liam's first candle moment, framed with family love.", icon: Cake },
+  { time: "6:00 PM", title: "Lunch", detail: "A relaxed celebration meal for family and friends.", icon: Gift },
+  { time: "6:45 PM", title: "Family Photos", detail: "Timeless portraits with our little gentleman.", icon: Camera },
+  { time: "7:15 PM", title: "Celebration Time", detail: "Music, laughter, blessings, and birthday memories.", icon: Sparkles }
+];
+const milestones = [
+  { date: "August 16, 2025", title: "Born", detail: "The day our sweetest little gentleman arrived and changed everything." },
+  { date: "October 2025", title: "First Smile", detail: "A tiny smile that made every quiet morning feel golden." },
+  { date: "March 2026", title: "First Crawl", detail: "Small hands, brave moves, and the beginning of big adventures." },
+  { date: "July 2026", title: "First Steps", detail: "Careful steps forward, cheered on by everyone who loves him." },
+  { date: "August 16, 2026", title: "First Birthday", detail: "One beautiful year of cuddles, laughter, wonder, and love." }
+];
 const gallery = [
   "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=80",
   "https://images.unsplash.com/photo-1522771930-78848d9293e8?auto=format&fit=crop&w=900&q=80",
@@ -60,6 +73,25 @@ function PoloBear({ className = "" }: { className?: string }) {
 function SparkleField() {
   const dots = useMemo(() => Array.from({ length: 38 }, (_, i) => ({ id: i, left: (i * 37) % 100, top: (i * 61) % 100, delay: (i % 9) * 0.35 })), []);
   return <div className="pointer-events-none absolute inset-0 overflow-hidden">{dots.map((d) => <motion.span key={d.id} className="absolute h-1 w-1 rounded-full bg-[#C8A96B]" style={{ left: `${d.left}%`, top: `${d.top}%` }} animate={{ opacity: [0.15, 0.9, 0.15], y: [-8, 8, -8], scale: [1, 1.8, 1] }} transition={{ duration: 4, delay: d.delay, repeat: Infinity }} />)}</div>;
+}
+
+function TasselBackdrop() {
+  const tassels = useMemo(() => Array.from({ length: 8 }, (_, i) => ({ id: i, left: 6 + i * 13, delay: i * 0.35, length: 78 + (i % 3) * 22 })), []);
+  return (
+    <div className="pointer-events-none fixed inset-x-0 top-0 z-0 hidden h-48 overflow-hidden opacity-55 sm:block" aria-hidden="true">
+      {tassels.map((item) => (
+        <motion.div
+          key={item.id}
+          className="tassel-string absolute top-0"
+          style={{ left: `${item.left}%`, height: item.length }}
+          animate={{ y: [0, 8, 0], rotate: [-1.5, 1.5, -1.5] }}
+          transition={{ duration: 5.5, delay: item.delay, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <span />
+        </motion.div>
+      ))}
+    </div>
+  );
 }
 
 function GoldCorner({ className = "" }: { className?: string }) {
@@ -145,7 +177,20 @@ function Countdown() {
     ["Minutes", Math.floor(diff / 60000) % 60],
     ["Seconds", Math.floor(diff / 1000) % 60]
   ];
-  return <Section title="Countdown">{values.map(([label, value]) => <motion.div key={label} whileHover={{ y: -6 }} className="soft-glow rounded-lg border border-[#C8A96B]/25 bg-white/80 p-5 text-center"><strong className="font-display block text-4xl text-[#1E2A44]">{String(value).padStart(2, "0")}</strong><span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#C8A96B]">{label}</span></motion.div>)}</Section>;
+  return (
+    <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-5xl px-5 py-16">
+      <div className="gold-line mx-auto mb-5 h-px w-40" />
+      <h2 className="font-display mb-9 text-center text-4xl text-[#1E2A44] sm:text-5xl">Countdown</h2>
+      <div className="mx-auto grid max-w-2xl grid-cols-2 gap-3 sm:gap-4 lg:max-w-none lg:grid-cols-4">
+        {values.map(([label, value]) => (
+          <motion.div key={label} whileHover={{ y: -6 }} className="soft-glow rounded-lg border border-[#C8A96B]/25 bg-white/85 p-5 text-center">
+            <strong className="font-display block text-4xl text-[#1E2A44] sm:text-5xl">{String(value).padStart(2, "0")}</strong>
+            <span className="mt-2 block text-[10px] font-semibold uppercase tracking-[0.24em] text-[#C8A96B] sm:text-xs">{label}</span>
+          </motion.div>
+        ))}
+      </div>
+    </motion.section>
+  );
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -172,6 +217,7 @@ export default function Home() {
   return (
     <main className="luxury-pattern min-h-screen overflow-hidden">
       <AnimatePresence>{intro && <Intro onDone={() => setIntro(false)} />}</AnimatePresence>
+      <TasselBackdrop />
       <SparkleField />
       <section className="relative grid min-h-screen place-items-center overflow-hidden bg-[#F2EFE8] px-4 py-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(200,169,107,.20),transparent_34%),linear-gradient(110deg,rgba(30,42,68,.06),transparent_45%)]" />
@@ -202,12 +248,54 @@ export default function Home() {
       </section>
 
       <Countdown />
-      <Section title="Celebration Timeline">{timeline.map((item, i) => <motion.div key={item} custom={i} whileHover={{ y: -5 }} className="rounded-lg border border-[#C8A96B]/25 bg-white/75 p-5"><Clock className="mb-4 text-[#C8A96B]" /><h3 className="font-display text-2xl">{item}</h3><p className="mt-2 text-sm text-[#1E2A44]/65">{i + 4}:00 PM</p></motion.div>)}</Section>
+      <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-6xl px-5 py-16">
+        <div className="gold-line mx-auto mb-5 h-px w-40" />
+        <h2 className="font-display mb-10 text-center text-4xl text-[#1E2A44] sm:text-5xl">Celebration Timeline</h2>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {timeline.map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <motion.div key={item.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} whileHover={{ y: -5 }} className="relative overflow-hidden rounded-lg border border-[#C8A96B]/25 bg-white/80 p-5 shadow-lg shadow-[#1E2A44]/5">
+                <div className="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-[#D9C7A3]/20" />
+                <div className="mb-5 flex items-center justify-between gap-3">
+                  <span className="rounded-full border border-[#C8A96B]/35 bg-[#FAF7F2] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#C8A96B]">{item.time}</span>
+                  <Icon className="text-[#C8A96B]" size={24} />
+                </div>
+                <h3 className="font-display text-2xl text-[#1E2A44]">{item.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#1E2A44]/65">{item.detail}</p>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.section>
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-[0.9fr_1.4fr]">
         <div className="soft-glow rounded-lg border border-[#C8A96B]/25 bg-white/80 p-7"><MapPin className="mb-4 text-[#C8A96B]" /><h2 className="font-display text-4xl">Venue</h2><p className="mt-4 font-semibold">{baby.venue}</p><p className="mt-2 text-sm leading-6 text-[#1E2A44]/70">{baby.address}</p><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(baby.mapsQuery)}`} target="_blank" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#1E2A44] px-5 py-3 text-sm font-semibold text-white"><Navigation size={16} /> Get Directions</a></div>
         <div className="map-frame h-80 overflow-hidden rounded-lg border border-[#C8A96B]/25"><iframe src={maps} title="Venue map" loading="lazy" /></div>
       </section>
-      <Section title="Memory Lane">{milestones.map((m) => <div key={m} className="rounded-lg border border-[#C8A96B]/25 bg-[#1E2A44] p-5 text-[#FAF7F2]"><Sparkles className="mb-4 text-[#C8A96B]" /><h3 className="font-display text-2xl">{m}</h3></div>)}</Section>
+      <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-4xl px-5 py-16">
+        <div className="gold-line mx-auto mb-5 h-px w-40" />
+        <h2 className="font-display mb-10 text-center text-4xl text-[#1E2A44] sm:text-5xl">Memory Lane</h2>
+        <div className="relative">
+          <div className="absolute left-5 top-4 h-[calc(100%-2rem)] w-px bg-gradient-to-b from-transparent via-[#C8A96B] to-transparent sm:left-1/2" />
+          <div className="space-y-5">
+            {milestones.map((m, i) => (
+              <motion.article key={m.title} initial={{ opacity: 0, x: i % 2 === 0 ? -28 : 28 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className={`relative sm:grid sm:grid-cols-2 sm:gap-10 ${i % 2 === 0 ? "" : "sm:[&>div]:col-start-2"}`}>
+                <span className="absolute left-[13px] top-7 z-10 grid h-4 w-4 place-items-center rounded-full border border-[#C8A96B] bg-[#FAF7F2] sm:left-1/2 sm:-translate-x-1/2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#C8A96B]" />
+                </span>
+                <div className="ml-12 rounded-lg border border-[#C8A96B]/25 bg-white/85 p-5 shadow-lg shadow-[#1E2A44]/5 sm:ml-0">
+                  <div className="mb-3 flex items-center gap-2 text-[#C8A96B]">
+                    <Baby size={18} />
+                    <span className="text-xs font-semibold uppercase tracking-[0.2em]">{m.date}</span>
+                  </div>
+                  <h3 className="font-display text-2xl text-[#1E2A44]">{m.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#1E2A44]/65">{m.detail}</p>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </motion.section>
       <Section title="Photo Gallery">{gallery.map((src, i) => <button key={src} onClick={() => setLightbox(src)} className="group aspect-[4/5] overflow-hidden rounded-lg border border-[#C8A96B]/25 bg-cover bg-center shadow-lg" style={{ backgroundImage: `url(${src})` }} aria-label={`Open baby photo ${i + 1}`}><span className="grid h-full place-items-center bg-[#1E2A44]/0 text-white opacity-0 transition group-hover:bg-[#1E2A44]/35 group-hover:opacity-100"><Camera /></span></button>)}</Section>
       <section className="mx-auto max-w-3xl px-5 py-16">
         <form onSubmit={submitRsvp} className="soft-glow rounded-lg border border-[#C8A96B]/25 bg-white/85 p-6 sm:p-9">
