@@ -143,21 +143,22 @@ function Countdown() {
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, []);
   const diff = Math.max(new Date(baby.date).getTime() - now, 0);
   const values = [
-    ["Days", Math.floor(diff / 86400000)],
-    ["Hours", Math.floor(diff / 3600000) % 24],
-    ["Minutes", Math.floor(diff / 60000) % 60],
-    ["Seconds", Math.floor(diff / 1000) % 60]
+    { label: "Days", value: Math.floor(diff / 86400000) },
+    { label: "Hours", value: Math.floor(diff / 3600000) % 24 },
+    { label: "Min", value: Math.floor(diff / 60000) % 60 },
+    { label: "Sec", value: Math.floor(diff / 1000) % 60 }
   ];
   return (
-    <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-5xl px-5 py-16">
+    <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-5xl px-5 py-12">
       <div className="gold-line mx-auto mb-5 h-px w-40" />
-      <h2 className="font-display mb-9 text-center text-4xl text-[#1E2A44] sm:text-5xl">Countdown</h2>
-      <div className="mx-auto grid max-w-2xl grid-cols-2 gap-3 sm:gap-4 lg:max-w-none lg:grid-cols-4">
-        {values.map(([label, value]) => (
-          <motion.div key={label} whileHover={{ y: -6 }} className="soft-glow rounded-lg border border-[#C8A96B]/25 bg-white/85 p-5 text-center">
-            <strong className="font-display block text-4xl text-[#1E2A44] sm:text-5xl">{String(value).padStart(2, "0")}</strong>
-            <span className="mt-2 block text-[10px] font-semibold uppercase tracking-[0.24em] text-[#C8A96B] sm:text-xs">{label}</span>
-          </motion.div>
+      <h2 className="font-display mb-6 text-center text-4xl text-[#1E2A44] sm:text-5xl">Countdown</h2>
+      <div className="flex flex-wrap items-baseline justify-center gap-x-5 gap-y-2">
+        {values.map(({ label, value }, i) => (
+          <span key={label} className="flex items-baseline gap-1.5">
+            <strong className="font-display text-4xl text-[#1E2A44] sm:text-5xl">{String(value).padStart(2, "0")}</strong>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C8A96B]">{label}</span>
+            {i < 3 && <span className="ml-3 text-xl text-[#C8A96B]/45">·</span>}
+          </span>
         ))}
       </div>
     </motion.section>
@@ -190,6 +191,8 @@ export default function Home() {
       <AnimatePresence>{intro && <Intro onDone={() => setIntro(false)} />}</AnimatePresence>
       <TasselBackdrop />
       <SparkleField />
+
+      {/* Hero */}
       <section className="relative min-h-screen overflow-hidden bg-[#F2EFE8]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(200,169,107,.20),transparent_34%),linear-gradient(110deg,rgba(30,42,68,.06),transparent_45%)]" />
         <div className="absolute inset-0 opacity-45 [background-image:radial-gradient(circle_at_1px_1px,rgba(30,42,68,.12)_1px,transparent_0)] [background-size:18px_18px]" />
@@ -218,48 +221,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Countdown />
-      <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-6xl px-5 py-16">
-        <div className="gold-line mx-auto mb-5 h-px w-40" />
-        <h2 className="font-display mb-10 text-center text-4xl text-[#1E2A44] sm:text-5xl">Celebration Timeline</h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {timeline.map((item, i) => {
-            const Icon = item.icon;
-            return (
-              <motion.div key={item.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} whileHover={{ y: -5 }} className="relative overflow-hidden rounded-lg border border-[#C8A96B]/25 bg-white/80 p-5 shadow-lg shadow-[#1E2A44]/5">
-                <div className="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-[#D9C7A3]/20" />
-                <div className="mb-5 flex items-center justify-between gap-3">
-                  <span className="rounded-full border border-[#C8A96B]/35 bg-[#FAF7F2] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#C8A96B]">{item.time}</span>
-                  <Icon className="text-[#C8A96B]" size={24} />
-                </div>
-                <h3 className="font-display text-2xl text-[#1E2A44]">{item.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-[#1E2A44]/65">{item.detail}</p>
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.section>
-      <section className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-[0.9fr_1.4fr]">
-        <div className="soft-glow rounded-lg border border-[#C8A96B]/25 bg-white/80 p-7"><MapPin className="mb-4 text-[#C8A96B]" /><h2 className="font-display text-4xl">Venue</h2><p className="mt-4 font-semibold">{baby.venue}</p><p className="mt-2 text-sm leading-6 text-[#1E2A44]/70">{baby.address}</p><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(baby.mapsQuery)}`} target="_blank" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#1E2A44] px-5 py-3 text-sm font-semibold text-white"><Navigation size={16} /> Get Directions</a></div>
-        <div className="map-frame h-80 overflow-hidden rounded-lg border border-[#C8A96B]/25"><iframe src={maps} title="Venue map" loading="lazy" /></div>
-      </section>
-      <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-4xl px-5 py-12">
-        <div className="gold-line mx-auto mb-5 h-px w-40" />
-        <h2 className="font-display mb-8 text-center text-4xl text-[#1E2A44] sm:text-5xl">Contact Details</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {contacts.map((contact) => (
-            <motion.a key={contact.name} href={contact.href} whileHover={{ y: -5 }} className="soft-glow flex items-center gap-4 rounded-lg border border-[#C8A96B]/25 bg-white/85 p-5">
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#1E2A44] text-[#C8A96B]">
-                <Phone size={20} />
-              </span>
-              <span>
-                <span className="font-display block text-2xl text-[#1E2A44]">{contact.name}</span>
-                <span className="mt-1 block text-sm font-medium text-[#1E2A44]/65">{contact.phone}</span>
-              </span>
-            </motion.a>
-          ))}
-        </div>
-      </motion.section>
+      {/* Memory Lane — right after the invitation */}
       <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-4xl px-5 py-16">
         <div className="gold-line mx-auto mb-5 h-px w-40" />
         <h2 className="font-display mb-10 text-center text-4xl text-[#1E2A44] sm:text-5xl">Memory Lane</h2>
@@ -284,7 +246,48 @@ export default function Home() {
           </div>
         </div>
       </motion.section>
+
+      {/* Countdown — single line */}
+      <Countdown />
+
+      {/* Celebration Timeline — schedule/itinerary style */}
+      <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-2xl px-5 py-16">
+        <div className="gold-line mx-auto mb-5 h-px w-40" />
+        <h2 className="font-display mb-10 text-center text-4xl text-[#1E2A44] sm:text-5xl">Celebration Timeline</h2>
+        <div>
+          {timeline.map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <motion.div key={item.title} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex items-stretch gap-0">
+                <div className="w-24 shrink-0 flex items-start justify-end pt-3 pr-4">
+                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#C8A96B] whitespace-nowrap">{item.time}</span>
+                </div>
+                <div className="flex shrink-0 flex-col items-center">
+                  <div className="grid h-10 w-10 place-items-center rounded-full border-2 border-[#C8A96B]/60 bg-white shadow-sm z-10">
+                    <Icon size={17} className="text-[#C8A96B]" />
+                  </div>
+                  {i < timeline.length - 1 && <div className="w-px flex-1 bg-[#C8A96B]/30 my-1 min-h-[2rem]" />}
+                </div>
+                <div className="flex-1 pl-4 pb-7 pt-1.5">
+                  <h3 className="font-display text-xl text-[#1E2A44]">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-5 text-[#1E2A44]/60">{item.detail}</p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.section>
+
+      {/* Venue */}
+      <section className="mx-auto grid max-w-6xl gap-6 px-5 py-16 md:grid-cols-[0.9fr_1.4fr]">
+        <div className="soft-glow rounded-lg border border-[#C8A96B]/25 bg-white/80 p-7"><MapPin className="mb-4 text-[#C8A96B]" /><h2 className="font-display text-4xl">Venue</h2><p className="mt-4 font-semibold">{baby.venue}</p><p className="mt-2 text-sm leading-6 text-[#1E2A44]/70">{baby.address}</p><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(baby.mapsQuery)}`} target="_blank" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#1E2A44] px-5 py-3 text-sm font-semibold text-white"><Navigation size={16} /> Get Directions</a></div>
+        <div className="map-frame h-80 overflow-hidden rounded-lg border border-[#C8A96B]/25"><iframe src={maps} title="Venue map" loading="lazy" /></div>
+      </section>
+
+      {/* Photo Gallery */}
       <Section title="Photo Gallery">{gallery.map((src, i) => <button key={src} onClick={() => setLightbox(src)} className="group aspect-[4/5] overflow-hidden rounded-lg border border-[#C8A96B]/25 bg-cover bg-center shadow-lg" style={{ backgroundImage: `url(${src})` }} aria-label={`Open baby photo ${i + 1}`}><span className="grid h-full place-items-center bg-[#1E2A44]/0 text-white opacity-0 transition group-hover:bg-[#1E2A44]/35 group-hover:opacity-100"><Camera /></span></button>)}</Section>
+
+      {/* RSVP */}
       <section className="mx-auto max-w-3xl px-5 py-16">
         <form onSubmit={submitRsvp} className="soft-glow rounded-lg border border-[#C8A96B]/25 bg-white/85 p-6 sm:p-9">
           <h2 className="font-display mb-7 text-center text-4xl">RSVP</h2>
@@ -299,6 +302,26 @@ export default function Home() {
           {status && <p className="mt-4 text-center text-sm text-[#1E2A44]/70">{status}</p>}
         </form>
       </section>
+
+      {/* Contact Details — at the very end */}
+      <motion.section initial={{ opacity: 0, y: 34, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-120px" }} transition={{ duration: 0.75 }} className="mx-auto w-full max-w-4xl px-5 py-12">
+        <div className="gold-line mx-auto mb-5 h-px w-40" />
+        <h2 className="font-display mb-8 text-center text-4xl text-[#1E2A44] sm:text-5xl">Contact Details</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {contacts.map((contact) => (
+            <motion.a key={contact.name} href={contact.href} whileHover={{ y: -5 }} className="soft-glow flex items-center gap-4 rounded-lg border border-[#C8A96B]/25 bg-white/85 p-5">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#1E2A44] text-[#C8A96B]">
+                <Phone size={20} />
+              </span>
+              <span>
+                <span className="font-display block text-2xl text-[#1E2A44]">{contact.name}</span>
+                <span className="mt-1 block text-sm font-medium text-[#1E2A44]/65">{contact.phone}</span>
+              </span>
+            </motion.a>
+          ))}
+        </div>
+      </motion.section>
+
       <footer className="bg-[#1E2A44] px-5 py-16 text-center text-[#FAF7F2]"><Check className="mx-auto mb-5 text-[#C8A96B]" /><h2 className="font-display text-4xl">Thank You</h2><p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-white/70">Your presence is the most beautiful gift as we celebrate one golden year of love.</p></footer>
       <AnimatePresence>{lightbox && <motion.button className="fixed inset-0 z-50 grid place-items-center bg-[#1E2A44]/90 p-5" onClick={() => setLightbox(null)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><X className="absolute right-6 top-6 text-white" /><Image src={lightbox} alt="Baby gallery preview" width={960} height={1200} unoptimized className="max-h-[86vh] w-auto rounded-lg border border-[#C8A96B] object-contain" /></motion.button>}</AnimatePresence>
     </main>
