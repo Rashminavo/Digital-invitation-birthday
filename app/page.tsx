@@ -79,6 +79,52 @@ function SparkleField() {
   return <div className="pointer-events-none absolute inset-0 overflow-hidden">{dots.map((d) => <motion.span key={d.id} className="absolute h-1 w-1 rounded-full bg-[#C8A96B]" style={{ left: `${d.left}%`, top: `${d.top}%` }} animate={{ opacity: [0.15, 0.9, 0.15], y: [-8, 8, -8], scale: [1, 1.8, 1] }} transition={{ duration: 4, delay: d.delay, repeat: Infinity }} />)}</div>;
 }
 
+function ConfettiFall() {
+  const pieces = useMemo(() => Array.from({ length: 55 }, (_, i) => ({
+    id: i,
+    left: (i * 19 + 3) % 100,
+    delay: (i * 0.22) % 7,
+    duration: 4.5 + (i % 6) * 0.6,
+    w: 5 + (i % 7),
+    h: 8 + (i % 9),
+    color: ["#C8A96B", "#1E2A44", "#D9C7A3", "#B99667", "#FAF7F2", "#7BA7BC", "#E8A87C", "#A8D5A2"][i % 8],
+    shape: i % 3,
+    startRotate: (i * 53) % 360,
+    swayAmp: 20 + (i % 5) * 14,
+    swayDir: i % 2 === 0 ? 1 : -1,
+  })), []);
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[1] overflow-hidden" aria-hidden="true">
+      {pieces.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute"
+          style={{
+            left: `${p.left}%`,
+            width: p.shape === 0 ? p.w : p.shape === 1 ? p.w * 0.6 : p.w * 1.4,
+            height: p.shape === 1 ? p.w * 0.6 : p.h,
+            borderRadius: p.shape === 1 ? "50%" : 2,
+            backgroundColor: p.color,
+            opacity: 0.72,
+          }}
+          initial={{ y: -24, rotate: p.startRotate }}
+          animate={{
+            y: "105vh",
+            rotate: p.startRotate + p.swayDir * 540,
+            x: [0, p.swayAmp * p.swayDir, 0, -p.swayAmp * p.swayDir, 0],
+          }}
+          transition={{
+            y: { duration: p.duration, delay: p.delay, repeat: Infinity, ease: "linear" },
+            rotate: { duration: p.duration, delay: p.delay, repeat: Infinity, ease: "linear" },
+            x: { duration: p.duration * 0.55, delay: p.delay, repeat: Infinity, ease: "easeInOut" },
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 function TasselBackdrop() {
   const tassels = useMemo(() => Array.from({ length: 8 }, (_, i) => ({ id: i, left: 6 + i * 13, delay: i * 0.35, length: 78 + (i % 3) * 22 })), []);
   return (
@@ -190,6 +236,7 @@ export default function Home() {
     <main className="luxury-pattern min-h-screen overflow-hidden">
       <AnimatePresence>{intro && <Intro onDone={() => setIntro(false)} />}</AnimatePresence>
       <TasselBackdrop />
+      <ConfettiFall />
       <SparkleField />
 
       {/* Hero */}
