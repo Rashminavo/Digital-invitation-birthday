@@ -84,7 +84,7 @@ function ConfettiFall() {
     id: i,
     left: (i * 19 + 3) % 100,
     delay: (i * 0.22) % 7,
-    duration: 4.5 + (i % 6) * 0.6,
+    duration: 8 + (i % 6) * 1.2,
     w: 5 + (i % 7),
     h: 8 + (i % 9),
     color: ["#C8A96B", "#1E2A44", "#D9C7A3", "#B99667", "#FAF7F2", "#7BA7BC", "#E8A87C", "#A8D5A2"][i % 8],
