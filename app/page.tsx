@@ -11,17 +11,16 @@ const baby = {
   date: "2026-08-16T11:00:00+05:30",
   displayDate: "Sunday, August 16th 2026",
   time: "4:00 PM onwards",
-  venue: "Raffles Banquets & Catering",
-  address: "262 Kotte Rd, Nugegoda 10250",
-  mapsQuery: "Raffles Banquets & Catering 262 Kotte Rd Nugegoda 10250"
+  venue: "Swingir Hills",
+  address: "No. 215, Cooray Waththa Thalagala, Gonapola",
+  mapsQuery: "Sawingir Hills, No. 215, Cooray Waththa Thalagala, Gonapola"
 };
 
 const timeline = [
   { time: "4:00 PM", title: "Guest Arrival", detail: "A warm welcome with soft music and golden smiles.", icon: Users },
-  { time: "4:30 PM", title: "Welcome Drinks", detail: "Elegant refreshments served as everyone gathers.", icon: Coffee },
   { time: "5:15 PM", title: "Cake Cutting", detail: "Liam's first candle moment, framed with family love.", icon: Cake },
-  { time: "6:00 PM", title: "Lunch", detail: "A relaxed celebration meal for family and friends.", icon: Gift },
-  { time: "6:45 PM", title: "Family Photos", detail: "Timeless portraits with our little gentleman.", icon: Camera },
+  { time: "6:00 PM", title: "Family Photos", detail: "Timeless portraits with our little gentleman.", icon: Camera },
+  { time: "6:45 PM", title: "Lunch", detail: "A relaxed celebration meal for family and friends.", icon: Gift },
   { time: "7:15 PM", title: "Celebration Time", detail: "Music, laughter, blessings, and birthday memories.", icon: Sparkles }
 ];
 const milestones = [
