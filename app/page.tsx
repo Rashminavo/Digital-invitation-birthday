@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Baby, Cake, CalendarDays, Camera, Check, ChevronDown, Coffee, Gift, MapPin, MessageCircle, Navigation, Phone, Sparkles, Users, X } from "lucide-react";
 import Image from "next/image";
+import { title } from "process";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
 const baby = {
@@ -10,24 +11,25 @@ const baby = {
   shortName: "L",
   date: "2026-08-16T11:00:00+05:30",
   displayDate: "Sunday, August 16th 2026",
-  time: "4:00 PM onwards",
+  time: "7:00 PM onwards",
   venue: "Swingir Hills",
   address: "No. 215, Cooray Waththa Thalagala, Gonapola",
   mapsQuery: "Sawingir Hills, No. 215, Cooray Waththa Thalagala, Gonapola"
 };
 
 const timeline = [
-  { time: "4:00 PM", title: "Guest Arrival", detail: "A warm welcome with soft music and golden smiles.", icon: Users },
-  { time: "5:15 PM", title: "Cake Cutting", detail: "Liam's first candle moment, framed with family love.", icon: Cake },
-  { time: "6:00 PM", title: "Family Photos", detail: "Timeless portraits with our little gentleman.", icon: Camera },
-  { time: "6:45 PM", title: "Lunch", detail: "A relaxed celebration meal for family and friends.", icon: Gift },
-  { time: "7:15 PM", title: "Celebration Time", detail: "Music, laughter, blessings, and birthday memories.", icon: Sparkles }
+  { time: "6:45 PM", title: "Guest Arrival", detail: "A warm welcome with soft music and golden smiles.", icon: Users },
+  { time: "7:00 PM", title: "Cake Cutting", detail: "Liam's first candle moment, framed with family love.", icon: Cake },
+  { time: "7:30 PM", title: "Family Photos", detail: "Timeless portraits with our little gentleman.", icon: Camera },
+  { time: "8:00 PM", title: "Dinner", detail: "A relaxed celebration meal for family and friends.", icon: Gift },
+  { time: "8:30 PM", title: "Celebration Time", detail: "Music, laughter, blessings, and birthday memories.", icon: Sparkles }
 ];
 const milestones = [
   { date: "August 16, 2025", title: "Born", detail: "The day our sweetest little gentleman arrived and changed everything." },
-  { date: "October 2025", title: "First Smile", detail: "A tiny smile that made every quiet morning feel golden." },
-  { date: "March 2026", title: "First Crawl", detail: "Small hands, brave moves, and the beginning of big adventures." },
-  { date: "July 2026", title: "First Steps", detail: "Careful steps forward, cheered on by everyone who loves him." },
+  { date: "October 2025", title: "First Smile", detail: "A tiny smile that made every quiet morning feel golden." },  
+  { date: "November 2025", title: "First Crawl", detail: "Small hands, brave moves, and the beginning of big adventures." },
+  { date: "May 20 2026", title: "First Word", detail: "One tiny sound that turned into a word — and suddenly the whole house was listening."},
+  { date: "June 2026", title: "First Steps", detail: "Careful steps forward, cheered on by everyone who loves him." },
   { date: "August 16, 2026", title: "First Birthday", detail: "One beautiful year of cuddles, laughter, wonder, and love." }
 ];
 const contacts = [
