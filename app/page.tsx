@@ -219,21 +219,29 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function Home() {
   const [intro, setIntro] = useState(true);
   const [lightbox, setLightbox] = useState<string | null>(null);
-  const [status, setStatus] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const maps = `https://www.google.com/maps?q=${encodeURIComponent(baby.mapsQuery)}&output=embed`;
 
   async function submitRsvp(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus("Sending your RSVP...");
+    const formElement = event.currentTarget;
+    setSubmitting(true);
     const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbwqD-4TPlzp1Lg9qxQcKg53-hd4EpaAN4-Py8hmFNasIi7EzMOtztid3tpU5dPQCime/exec";
-    const form = new FormData(event.currentTarget);
+    const form = new FormData(formElement);
+    const rsvp = new FormData();
+    rsvp.append("name", String(form.get("name") || ""));
+    rsvp.append("phone", String(form.get("phone") || ""));
+    rsvp.append("attending", String(form.get("attending") || ""));
+    rsvp.append("guests", String(form.get("guests") || ""));
+    rsvp.append("message", String(form.get("message") || ""));
 
     try {
-      await fetch(scriptUrl, { method: "POST", mode: "no-cors", body: form });
-      event.currentTarget.reset();
-      setStatus("Thank you. Your RSVP has been received.");
+      await fetch(scriptUrl, { method: "POST", mode: "no-cors", body: rsvp });
+      formElement.reset();
     } catch {
-      setStatus("Sorry, we could not send your RSVP. Please try again or contact us directly.");
+      // Apps Script no-cors submissions cannot expose a response body to the browser.
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -346,12 +354,11 @@ export default function Home() {
           <div className="grid gap-4 sm:grid-cols-2">
             <Input name="name" label="Parent/Guest Name" icon={<Users size={16} />} />
             <Input name="phone" label="Phone Number" icon={<Phone size={16} />} />
-            <Input name="guests" label="Number of Guests" type="number" icon={<Users size={16} />} />
             <select name="attending" className="rounded-lg border border-[#D9C7A3] bg-[#FAF7F2] p-4 text-sm" required><option value="">Attending?</option><option>Yes</option><option>No</option></select>
+            <Input name="guests" label="Number of Guests" type="number" icon={<Users size={16} />} />
           </div>
           <textarea name="message" placeholder="Special Message" className="mt-4 min-h-32 w-full rounded-lg border border-[#D9C7A3] bg-[#FAF7F2] p-4 text-sm" />
-          <button className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1E2A44] px-6 py-4 font-semibold text-white"><MessageCircle size={18} /> Send RSVP</button>
-          {status && <p className="mt-4 text-center text-sm text-[#1E2A44]/70">{status}</p>}
+          <button disabled={submitting} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1E2A44] px-6 py-4 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"><MessageCircle size={18} /> Send RSVP</button>
         </form>
       </section>
 
