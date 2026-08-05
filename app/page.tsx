@@ -12,7 +12,7 @@ const baby = {
   date: "2026-08-16T11:00:00+05:30",
   displayDate: "Sunday, August 16th 2026",
   time: "7:00 PM onwards",
-  venue: "Sawingir  Hills",
+  venue: "Sawingir  Hills Hotel",
   address: "No.215, Cooray Estate, Thalagala , Gonapola",
   mapsQuery: "Sawingir Hills, No. 215, Cooray Waththa Thalagala, Gonapola"
 };
@@ -25,12 +25,12 @@ const timeline = [
   { time: "8:30 PM", title: "Celebration Time", detail: "Music, laughter, blessings, and birthday memories.", icon: Sparkles }
 ];
 const milestones = [
-  { date: "August 16, 2025", title: "Born", detail: "The day our sweetest little gentleman arrived and changed everything." },
-  { date: "October 2025", title: "First Smile", detail: "A tiny smile that made every quiet morning feel golden." },  
-  { date: "November 2025", title: "First Crawl", detail: "Small hands, brave moves, and the beginning of big adventures." },
-  { date: "May 20 2026", title: "First Word", detail: "One tiny sound that turned into a word — and suddenly the whole house was listening."},
-  { date: "June 2026", title: "First Steps", detail: "Careful steps forward, cheered on by everyone who loves him." },
-  { date: "August 16, 2026", title: "First Birthday", detail: "One beautiful year of cuddles, laughter, wonder, and love." }
+  { date: "16th August 2025", title: "First Cry", detail: "The day our sweetest little gentleman arrived and changed everything." },
+  { date: "22nd October 2025", title: "First Smile", detail: "A tiny smile that made every quiet morning feel golden." },  
+  { date: "3rd February 2026", title: "First Crawl", detail: "Small hands, brave moves, and the beginning of big adventures." },
+  { date: "20th May 2026", title: "First Word", detail: "One tiny sound that turned into a word — and suddenly the whole house was listening."},
+  { date: "23rd June 2026", title: "First Steps", detail: "Careful steps forward, cheered on by everyone who loves him." },
+  { date: "16th August 2026", title: "First Birthday", detail: "One beautiful year of cuddles, laughter, wonder, and love." }
 ];
 const contacts = [
   { name: "Nirmal", phone: "+94 74 381 6127", href: "tel:+94743816127" },
@@ -173,7 +173,7 @@ function Intro({ onDone }: { onDone: () => void }) {
         <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2 }} className="mx-auto mb-8 grid h-24 w-24 place-items-center rounded-full border border-[#C8A96B]/60 text-[#C8A96B] shadow-[0_0_60px_rgba(200,169,107,.28)]">
           <span className="font-display text-4xl">{baby.shortName}</span>
         </motion.div>
-        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.75 }} className="text-xs font-semibold uppercase tracking-[0.45em] text-[#C8A96B]">A first birthday celebration</motion.p>
+        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.75 }} className="text-xs font-semibold uppercase tracking-[0.45em] text-[#C8A96B]">The first birthday celebration</motion.p>
         <motion.h1 initial={{ opacity: 0, filter: "blur(12px)" }} animate={{ opacity: 1, filter: "blur(0px)" }} transition={{ delay: 1.25, duration: 1.3 }} className="font-display mt-5 text-5xl text-[#1E2A44] sm:text-7xl">{baby.name}</motion.h1>
         <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.0, duration: 1 }} className="mx-auto mt-8 h-44 w-44 overflow-hidden rounded-full border border-[#C8A96B]/45 bg-white/60 shadow-2xl shadow-[#1E2A44]/15">
           <Image src="/images/bear.jpg" alt="Polo bear" width={320} height={320} priority className="h-full w-full object-contain" />
