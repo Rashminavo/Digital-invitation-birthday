@@ -151,17 +151,17 @@ function PhotoInvitation({ intro }: { intro: boolean }) {
       initial={{ opacity: 0, scale: 1.06, filter: "blur(22px)" }}
       animate={{ opacity: intro ? 0 : 1, scale: intro ? 1.06 : 1, filter: intro ? "blur(22px)" : "blur(0px)" }}
       transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0"
+      className="relative z-10 flex min-h-[100svh] w-full items-center justify-center px-2 py-4"
     >
       <Image
         src="/images/liam-photo.jpg"
         alt="Liam's first birthday invitation"
-        fill
+        width={864}
+        height={1224}
         priority
-        sizes="100vw"
-        className="object-contain"
+        sizes="(min-width: 768px) 70vw, 100vw"
+        className="h-auto max-h-[calc(100svh-2rem)] w-auto max-w-full object-contain"
       />
-      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#1E2A44]/45 to-transparent" />
     </motion.div>
   );
 }
@@ -253,7 +253,7 @@ export default function Home() {
       <SparkleField />
 
       {/* Hero */}
-      <section className="relative min-h-screen overflow-hidden bg-[#F2EFE8]">
+      <section className="relative min-h-[100svh] overflow-hidden bg-[#F2EFE8]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(200,169,107,.20),transparent_34%),linear-gradient(110deg,rgba(30,42,68,.06),transparent_45%)]" />
         <div className="absolute inset-0 opacity-45 [background-image:radial-gradient(circle_at_1px_1px,rgba(30,42,68,.12)_1px,transparent_0)] [background-size:18px_18px]" />
         <PhotoInvitation intro={intro} />
