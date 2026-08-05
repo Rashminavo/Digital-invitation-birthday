@@ -37,10 +37,10 @@ const contacts = [
   { name: "Nirmani", phone: "+94 76 107 8464", href: "tel:+94761078464" }
 ];
 const gallery = [
-  "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1522771930-78848d9293e8?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1546015720-b8b30df5aa27?auto=format&fit=crop&w=900&q=80"
+  "/images/Liam 1.jpeg",
+  "/images/Liam 2.jpeg",
+  "/images/Liam 3.jpeg",
+  "/images/Liam 4.jpeg"
 ];
 
 function PoloBear({ className = "" }: { className?: string }) {
