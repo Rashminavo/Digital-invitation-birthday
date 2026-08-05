@@ -159,7 +159,7 @@ function PhotoInvitation({ intro }: { intro: boolean }) {
         fill
         priority
         sizes="100vw"
-        className="object-cover"
+        className="object-contain"
       />
       <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#1E2A44]/45 to-transparent" />
     </motion.div>
@@ -177,7 +177,7 @@ function Intro({ onDone }: { onDone: () => void }) {
         <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.75 }} className="text-xs font-semibold uppercase tracking-[0.45em] text-[#C8A96B]">A first birthday celebration</motion.p>
         <motion.h1 initial={{ opacity: 0, filter: "blur(12px)" }} animate={{ opacity: 1, filter: "blur(0px)" }} transition={{ delay: 1.25, duration: 1.3 }} className="font-display mt-5 text-5xl text-[#1E2A44] sm:text-7xl">{baby.name}</motion.h1>
         <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.0, duration: 1 }} className="mx-auto mt-8 h-44 w-44 overflow-hidden rounded-full border border-[#C8A96B]/45 bg-white/60 shadow-2xl shadow-[#1E2A44]/15">
-          <Image src="/images/bear.jpg" alt="Polo bear" width={320} height={320} priority className="h-full w-full object-cover" />
+          <Image src="/images/bear.jpg" alt="Polo bear" width={320} height={320} priority className="h-full w-full object-contain" />
         </motion.div>
         <motion.button onClick={onDone} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3 }} className="mt-8 rounded-full border border-[#C8A96B] bg-[#1E2A44] px-7 py-3 text-sm font-semibold uppercase tracking-[0.24em] text-[#FAF7F2] shadow-xl shadow-[#1E2A44]/20">Open Invitation</motion.button>
       </div>
