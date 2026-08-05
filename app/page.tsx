@@ -12,8 +12,8 @@ const baby = {
   date: "2026-08-16T11:00:00+05:30",
   displayDate: "Sunday, August 16th 2026",
   time: "7:00 PM onwards",
-  venue: "Swingir Hills",
-  address: "No. 215, Cooray Waththa Thalagala, Gonapola",
+  venue: "Sawingir  Hills",
+  address: "No.215, Cooray Estate, Thalagala , Gonapola",
   mapsQuery: "Sawingir Hills, No. 215, Cooray Waththa Thalagala, Gonapola"
 };
 
