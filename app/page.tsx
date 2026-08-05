@@ -345,7 +345,14 @@ export default function Home() {
       </section>
 
       {/* Photo Gallery */}
-      <Section title="Photo Gallery">{gallery.map((src, i) => <button key={src} onClick={() => setLightbox(src)} className="group aspect-[4/5] overflow-hidden rounded-lg border border-[#C8A96B]/25 bg-cover bg-center shadow-lg" style={{ backgroundImage: `url(${src})` }} aria-label={`Open baby photo ${i + 1}`}><span className="grid h-full place-items-center bg-[#1E2A44]/0 text-white opacity-0 transition group-hover:bg-[#1E2A44]/35 group-hover:opacity-100"><Camera /></span></button>)}</Section>
+      <Section title="Photo Gallery">
+        {gallery.map((src, i) => (
+          <button key={src} onClick={() => setLightbox(src)} className="group relative aspect-[4/5] overflow-hidden rounded-lg border border-[#C8A96B]/25 bg-[#FAF7F2] shadow-lg" aria-label={`Open baby photo ${i + 1}`}>
+            <Image src={src} alt={`Liam gallery photo ${i + 1}`} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+            <span className="absolute inset-0 grid place-items-center bg-[#1E2A44]/0 text-white opacity-0 transition group-hover:bg-[#1E2A44]/35 group-hover:opacity-100"><Camera /></span>
+          </button>
+        ))}
+      </Section>
 
       {/* RSVP */}
       <section className="mx-auto max-w-3xl px-5 py-16">
