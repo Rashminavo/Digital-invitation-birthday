@@ -225,12 +225,16 @@ export default function Home() {
   async function submitRsvp(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("Sending your RSVP...");
-    const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
-    if (!scriptUrl) return setStatus("Add NEXT_PUBLIC_GOOGLE_SCRIPT_URL to enable RSVP submission.");
+    const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbwqD-4TPlzp1Lg9qxQcKg53-hd4EpaAN4-Py8hmFNasIi7EzMOtztid3tpU5dPQCime/exec";
     const form = new FormData(event.currentTarget);
-    await fetch(scriptUrl, { method: "POST", mode: "no-cors", body: form });
-    event.currentTarget.reset();
-    setStatus("Thank you. Your RSVP has been received.");
+
+    try {
+      await fetch(scriptUrl, { method: "POST", mode: "no-cors", body: form });
+      event.currentTarget.reset();
+      setStatus("Thank you. Your RSVP has been received.");
+    } catch {
+      setStatus("Sorry, we could not send your RSVP. Please try again or contact us directly.");
+    }
   }
 
   return (
